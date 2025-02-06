@@ -278,6 +278,7 @@ void glTexImage1D(GLenum target, GLint level, GLint internalFormat, GLsizei widt
 void glTexImage2D(GLenum target, GLint level,GLint internalFormat,GLsizei width, GLsizei height,GLint border, GLenum format, GLenum type,const GLvoid* pixels) {
     LOG();
     auto& tex = g_textures[bound_texture];
+    tex.internal_format = internalFormat;
     tex.format = format;
     internal_convert(reinterpret_cast<GLenum *>(&internalFormat), &type, &format);
     LOG_D("glTexImage2D,target: 0x%x,level: %d,internalFormat: 0x%x->0x%x,width: %d,height: %d,border: %d,format: 0x%x,type: 0x%x",target,level,internalFormat,internalFormat,width,height,border,format,type);
@@ -293,7 +294,7 @@ void glTexImage2D(GLenum target, GLint level,GLint internalFormat,GLsizei width,
     }
     LOAD_GLES(glTexImage2D, void, GLenum target, GLint level,GLint internalFormat,GLsizei width, GLsizei height,GLint border, GLenum format, GLenum type,const GLvoid* pixels);
     gles_glTexImage2D(target, level, internalFormat, width, height, border, format, type, pixels);
-    if (tex.format == GL_BGRA) {
+    if (tex.format == GL_BGRA && tex.internal_format == GL_RGBA8) {
         LOG_D("Detected GL_BGRA format @ tex = %d, do swizzle", bound_texture);
         if (tex.swizzle_param[0] == 0) { // assert this as never called glTexParameteri(..., GL_TEXTURE_SWIZZLE_R, ...)
             tex.swizzle_param[0] = GL_RED;

@@ -55,6 +55,15 @@ void es_rebind_framebuffer() {
             continue;
 
         gles_glBindFramebuffer(GL_DRAW_FRAMEBUFFER, fboid);
+
+        // WIP: FBO -> texture binding
+        for (size_t i = 0; i < fbo.attachments.size(); ++i) {
+            GLenum actual_attachment = GL_COLOR_ATTACHMENT0 + i;
+            GLenum gl_attachment = fbo.attachments[i];
+            auto& att = fbo.texture_binding[gl_attachment];
+            gles_glFramebufferTexture2D(GL_DRAW_FRAMEBUFFER, actual_attachment, att.textarget, att.texture, att.level);
+        }
+
         if (fbo.attachments.size() == 1 && fbo.attachments[0] == GL_BACK) {
             gles_glDrawBuffers(1, fbo.attachments.data());
         } else {
@@ -67,14 +76,6 @@ void es_rebind_framebuffer() {
                     new_attachments[i] = GL_COLOR_ATTACHMENT0 + i;
             }
             gles_glDrawBuffers(new_attachments.size(), new_attachments.data());
-        }
-
-        // WIP: FBO -> texture binding
-        for (size_t i = 0; i < fbo.attachments.size(); ++i) {
-            GLenum actual_attachment = GL_COLOR_ATTACHMENT0 + i;
-            GLenum gl_attachment = fbo.attachments[i];
-            auto& att = fbo.texture_binding[gl_attachment];
-            gles_glFramebufferTexture2D(GL_DRAW_FRAMEBUFFER, actual_attachment, att.textarget, att.texture, att.level);
         }
     }
 
@@ -158,11 +159,11 @@ void glFramebufferTexture2D(GLenum target, GLenum attachment, GLenum textarget, 
 
     LOG_D("glFramebufferTexture2D(0x%x, 0x%x, 0x%x, %d, %d)", target, attachment, textarget, texture, level)
 
-    if (attachment == GL_DEPTH_ATTACHMENT || attachment == GL_STENCIL_ATTACHMENT || attachment == GL_DEPTH_STENCIL_ATTACHMENT) {
+    //if (attachment == GL_DEPTH_ATTACHMENT || attachment == GL_STENCIL_ATTACHMENT || attachment == GL_DEPTH_STENCIL_ATTACHMENT) {
         LOAD_GLES(glFramebufferTexture2D, void, GLenum target, GLenum attachment, GLenum textarget, GLuint texture, GLint level)
         gles_glFramebufferTexture2D(target, attachment, textarget, texture, level);
-        CHECK_GL_ERROR
-    }
+    //    CHECK_GL_ERROR
+    //}
 
     if (target == GL_FRAMEBUFFER)
         target = GL_DRAW_FRAMEBUFFER;
