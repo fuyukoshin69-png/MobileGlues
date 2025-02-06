@@ -40,6 +40,8 @@ GLAPI GLAPIENTRY void glDrawBuffer(GLenum buf);
 
 GLAPI GLAPIENTRY void glDrawBuffers(GLsizei n, const GLenum *bufs);
 
+GLAPI GLAPIENTRY void glDeleteFramebuffers(GLsizei n, const GLuint *framebuffers);
+
 #ifdef __cplusplus
 }
 #endif

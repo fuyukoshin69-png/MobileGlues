@@ -17,6 +17,7 @@ struct attachment_t {
 
 struct framebuffer_t {
     GLuint id;
+    GLenum target;
     std::vector<GLenum> attachments;
 
     // attachment - texture
@@ -51,7 +52,7 @@ void es_rebind_framebuffer() {
 
     // Rebuild all fbos to ES
     for (auto& [fboid, fbo]: g_framebuffers) {
-        if (!fbo.dirty)
+        if (!fbo.dirty || fbo.target != GL_DRAW_FRAMEBUFFER || g_fbo_bindings.draw_fbo != fboid)
             continue;
 
         gles_glBindFramebuffer(GL_DRAW_FRAMEBUFFER, fboid);
@@ -126,6 +127,7 @@ void glBindFramebuffer(GLenum target, GLuint framebuffer) {
 
     g_framebuffers[framebuffer] = {
             .id = framebuffer,
+            .target = target,
             .attachments = {}
     };
 
@@ -288,4 +290,19 @@ void glDrawBuffers(GLsizei n, const GLenum *bufs) {
 //    gles_glDrawBuffers(n, bufs);
 
 //    CHECK_GL_ERROR
+}
+
+void glDeleteFramebuffers(GLsizei n, const GLuint *framebuffers) {
+    LOG()
+
+    LOG_D("glDeleteFramebuffers(%d, %p)", n, framebuffers)
+
+    for (int i = 0; i < n; ++i) {
+        g_framebuffers.erase(framebuffers[i]);
+    }
+
+    LOAD_GLES(glDeleteFramebuffers, void, GLsizei n, const GLuint *framebuffers)
+    gles_glDeleteFramebuffers(n, framebuffers);
+
+    CHECK_GL_ERROR
 }

@@ -42,7 +42,7 @@ NATIVE_FUNCTION_HEAD(GLuint, glCreateProgram) NATIVE_FUNCTION_END(GLuint, glCrea
 NATIVE_FUNCTION_HEAD(GLuint, glCreateShader, GLenum type) NATIVE_FUNCTION_END(GLuint, glCreateShader, type)
 NATIVE_FUNCTION_HEAD(void, glCullFace, GLenum mode) NATIVE_FUNCTION_END_NO_RETURN(void, glCullFace, mode)
 NATIVE_FUNCTION_HEAD(void, glDeleteBuffers, GLsizei n, const GLuint *buffers) NATIVE_FUNCTION_END_NO_RETURN(void, glDeleteBuffers, n,buffers)
-NATIVE_FUNCTION_HEAD(void, glDeleteFramebuffers, GLsizei n, const GLuint *framebuffers) NATIVE_FUNCTION_END_NO_RETURN(void, glDeleteFramebuffers, n,framebuffers)
+//NATIVE_FUNCTION_HEAD(void, glDeleteFramebuffers, GLsizei n, const GLuint *framebuffers) NATIVE_FUNCTION_END_NO_RETURN(void, glDeleteFramebuffers, n,framebuffers)
 NATIVE_FUNCTION_HEAD(void, glDeleteProgram, GLuint program) NATIVE_FUNCTION_END_NO_RETURN(void, glDeleteProgram, program)
 NATIVE_FUNCTION_HEAD(void, glDeleteRenderbuffers, GLsizei n, const GLuint *renderbuffers) NATIVE_FUNCTION_END_NO_RETURN(void, glDeleteRenderbuffers, n,renderbuffers)
 NATIVE_FUNCTION_HEAD(void, glDeleteShader, GLuint shader) NATIVE_FUNCTION_END_NO_RETURN(void, glDeleteShader, shader)
