@@ -59,22 +59,30 @@ void es_rebind_framebuffer() {
             gles_glDrawBuffers(1, fbo.attachments.data());
         } else {
             // expect having COLOR_ATTACHMENTSi here
-            std::vector<GLenum> new_attachments(fbo.attachments.size(), GL_NONE);
-            for (size_t i = 0; i < fbo.attachments.size(); ++i) {
-                if (fbo.attachments[i] == GL_NONE)
-                    new_attachments[i] = GL_NONE;
-                else
-                    new_attachments[i] = GL_COLOR_ATTACHMENT0 + i;
+            //std::vector<GLenum> new_attachments(fbo.attachments.size(), GL_NONE);
+            //for (size_t i = 0; i < fbo.attachments.size(); ++i) {
+            //    if (fbo.attachments[i] == GL_NONE)
+            //        new_attachments[i] = GL_NONE;
+            //    else
+            //        new_attachments[i] = GL_COLOR_ATTACHMENT0 + i;
+            //}
+            //gles_glDrawBuffers(new_attachments.size(), new_attachments.data());
+            std::vector<GLenum> new_attachments;
+            for (const auto& attachment : fbo.attachments) {
+                new_attachments.push_back(attachment);
             }
-            gles_glDrawBuffers(new_attachments.size(), new_attachments.data());
         }
 
         // WIP: FBO -> texture binding
-        for (size_t i = 0; i < fbo.attachments.size(); ++i) {
-            GLenum actual_attachment = GL_COLOR_ATTACHMENT0 + i;
-            GLenum gl_attachment = fbo.attachments[i];
-            auto& att = fbo.texture_binding[gl_attachment];
-            gles_glFramebufferTexture2D(GL_DRAW_FRAMEBUFFER, actual_attachment, att.textarget, att.texture, att.level);
+        //for (size_t i = 0; i < fbo.attachments.size(); ++i) {
+        //    GLenum actual_attachment = GL_COLOR_ATTACHMENT0 + i;
+        //    GLenum gl_attachment = fbo.attachments[i];
+        //    auto& att = fbo.texture_binding[gl_attachment];
+        //    gles_glFramebufferTexture2D(GL_DRAW_FRAMEBUFFER, actual_attachment, att.textarget, att.texture, att.level);
+        //}
+
+        for (const auto& [gl_attachment, att] : fbo.texture_binding) {
+            gles_glFramebufferTexture2D(GL_DRAW_FRAMEBUFFER, gl_attachment, att.textarget, att.texture, att.level);
         }
     }
 
@@ -84,22 +92,6 @@ void es_rebind_framebuffer() {
 
     CHECK_GL_ERROR
 
-//    if (!bound_framebuffer)
-//        return;
-//
-//    struct attachment_t* attach;
-//    if (bound_framebuffer->current_target == GL_DRAW_FRAMEBUFFER)
-//        attach = bound_framebuffer->draw_attachment;
-//    else
-//        attach = bound_framebuffer->read_attachment;
-//
-//    if (!attach)
-//        return;
-//
-//    struct attachment_t attachment = attach[old_attachment - GL_COLOR_ATTACHMENT0];
-//
-//    LOAD_GLES(glFramebufferTexture2D, void, GLenum target, GLenum attachment, GLenum textarget, GLuint texture, GLint level)
-//    gles_glFramebufferTexture2D(bound_framebuffer->current_target, target_attachment, attachment.textarget, attachment.texture, attachment.level);
 }
 
 void glBindFramebuffer(GLenum target, GLuint framebuffer) {
@@ -128,28 +120,6 @@ void glBindFramebuffer(GLenum target, GLuint framebuffer) {
             .attachments = {}
     };
 
-//    if (!bound_framebuffer)
-//        bound_framebuffer = malloc(sizeof(struct framebuffer_t));
-//
-//    switch (target) {
-//        case GL_DRAW_FRAMEBUFFER:
-//            free(bound_framebuffer->draw_attachment);
-//            bound_framebuffer->draw_attachment = malloc(getMaxDrawBuffers() * sizeof(struct attachment_t));
-//            break;
-//        case GL_READ_FRAMEBUFFER:
-//            free(bound_framebuffer->read_attachment);
-//            bound_framebuffer->read_attachment = malloc(getMaxDrawBuffers() * sizeof(struct attachment_t));
-//            break;
-//        case GL_FRAMEBUFFER:
-//            free(bound_framebuffer->draw_attachment);
-//            bound_framebuffer->draw_attachment = malloc(getMaxDrawBuffers() * sizeof(struct attachment_t));
-//            free(bound_framebuffer->read_attachment);
-//            bound_framebuffer->read_attachment = malloc(getMaxDrawBuffers() * sizeof(struct attachment_t));
-//            break;
-//        default:
-//            break;
-//    }
-
     CHECK_GL_ERROR
 }
 
@@ -158,11 +128,13 @@ void glFramebufferTexture2D(GLenum target, GLenum attachment, GLenum textarget, 
 
     LOG_D("glFramebufferTexture2D(0x%x, 0x%x, 0x%x, %d, %d)", target, attachment, textarget, texture, level)
 
-    if (attachment == GL_DEPTH_ATTACHMENT || attachment == GL_STENCIL_ATTACHMENT || attachment == GL_DEPTH_STENCIL_ATTACHMENT) {
-        LOAD_GLES(glFramebufferTexture2D, void, GLenum target, GLenum attachment, GLenum textarget, GLuint texture, GLint level)
-        gles_glFramebufferTexture2D(target, attachment, textarget, texture, level);
-        CHECK_GL_ERROR
-    }
+    //if (attachment == GL_DEPTH_ATTACHMENT || attachment == GL_STENCIL_ATTACHMENT || attachment == GL_DEPTH_STENCIL_ATTACHMENT) {
+    //    LOAD_GLES(glFramebufferTexture2D, void, GLenum target, GLenum attachment, GLenum textarget, GLuint texture, GLint level)
+    //    gles_glFramebufferTexture2D(target, attachment, textarget, texture, level);
+    //    CHECK_GL_ERROR
+    //}
+    LOAD_GLES(glFramebufferTexture2D, void, GLenum target, GLenum attachment, GLenum textarget, GLuint texture, GLint level)
+    gles_glFramebufferTexture2D(target, attachment, textarget, texture, level);
 
     if (target == GL_FRAMEBUFFER)
         target = GL_DRAW_FRAMEBUFFER;
@@ -184,24 +156,6 @@ void glFramebufferTexture2D(GLenum target, GLenum attachment, GLenum textarget, 
     att.level = level;
     fb.dirty = 1;
 
-//    if (bound_framebuffer && attachment - GL_COLOR_ATTACHMENT0 <= getMaxDrawBuffers()) {
-//        struct attachment_t* attach;
-//        if (target == GL_DRAW_FRAMEBUFFER)
-//            attach = bound_framebuffer->draw_attachment;
-//        else
-//            attach = bound_framebuffer->read_attachment;
-//
-//        if (attach) {
-//            attach[attachment - GL_COLOR_ATTACHMENT0].textarget = textarget;
-//            attach[attachment - GL_COLOR_ATTACHMENT0].texture = texture;
-//            attach[attachment - GL_COLOR_ATTACHMENT0].level = level;
-//        }
-//
-//        bound_framebuffer->current_target = target;
-//    }
-//
-//    LOAD_GLES(glFramebufferTexture2D, void, GLenum target, GLenum attachment, GLenum textarget, GLuint texture, GLint level)
-//    gles_glFramebufferTexture2D(target, attachment, textarget, texture, level);
 
     CHECK_GL_ERROR
 }
@@ -211,45 +165,6 @@ void glDrawBuffer(GLenum buffer) {
 
     glDrawBuffers(1, &buffer);
 
-//    LOAD_GLES(glDrawBuffers, void, GLsizei n, const GLenum *bufs)
-//
-//    GLint currentFBO;
-//    glGetIntegerv(GL_FRAMEBUFFER_BINDING, &currentFBO);
-//
-//    if (currentFBO == 0) { // 默认帧缓冲
-//        GLenum buffers[1] = {GL_NONE};
-//        switch (buffer) {
-//            case GL_FRONT:
-//            case GL_BACK:
-//            case GL_NONE:
-//                buffers[0] = buffer;
-//                gles_glDrawBuffers(1, buffers);
-//                break;
-//            default:
-//                // 生成错误：GL_INVALID_ENUM
-//                break;
-//        }
-//    } else { // FBO场景
-//        GLint maxAttachments;
-//        glGetIntegerv(GL_MAX_COLOR_ATTACHMENTS, &maxAttachments);
-//
-//        if (buffer == GL_NONE) {
-//            GLenum *buffers = (GLenum *)alloca(maxAttachments * sizeof(GLenum));
-//            for (int i = 0; i < maxAttachments; i++) {
-//                buffers[i] = GL_NONE;
-//            }
-//            gles_glDrawBuffers(maxAttachments, buffers);
-//        } else if (buffer >= GL_COLOR_ATTACHMENT0 &&
-//                   buffer < GL_COLOR_ATTACHMENT0 + maxAttachments) {
-//            GLenum *buffers = (GLenum *)alloca(maxAttachments * sizeof(GLenum));
-//            for (int i = 0; i < maxAttachments; i++) {
-//                buffers[i] = (i == (buffer - GL_COLOR_ATTACHMENT0)) ? buffer : GL_NONE;
-//            }
-//            gles_glDrawBuffers(maxAttachments, buffers);
-//        } else {
-//            // 生成错误：GL_INVALID_ENUM
-//        }
-//    }
 }
 
 void glDrawBuffers(GLsizei n, const GLenum *bufs) {
@@ -267,24 +182,5 @@ void glDrawBuffers(GLsizei n, const GLenum *bufs) {
     }
     fbo.dirty = 1;
 
-    // defer calling es functions
-
-//    for (int i = 0; i < n; i++) {
-//        if (bufs[i] >= GL_COLOR_ATTACHMENT0 && bufs[i] <= GL_COLOR_ATTACHMENT0 + getMaxDrawBuffers()) {
-//            GLenum target_attachment = GL_COLOR_ATTACHMENT0 + i;
-//            new_bufs[i] = target_attachment;
-//            if (bufs[i] == target_attachment)
-//                continue;
-//            rebind_framebuffer(bufs[i], target_attachment);
-//        } else {
-//            new_bufs[i] = bufs[i];
-//        }
-//    }
-
     es_rebind_framebuffer();
-
-//    LOAD_GLES(glDrawBuffers, void, GLsizei n, const GLenum *bufs)
-//    gles_glDrawBuffers(n, bufs);
-
-//    CHECK_GL_ERROR
 }
