@@ -30,7 +30,7 @@ add_library(${CMAKE_PROJECT_NAME} SHARED
         gl/log.c
         gl/program.c
         gl/shader.c
-        gl/framebuffer.c
+        gl/framebuffer.cpp
         gl/texture.cpp
         gl/drawing.c
         gl/mg.c

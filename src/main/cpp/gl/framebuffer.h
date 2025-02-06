@@ -7,26 +7,41 @@
 
 #include "gl.h"
 
-struct attachment_t {
-    GLenum textarget;
-    GLuint texture;
-    GLint level;
-};
+/*
+ * target glBindFramebuffer(GL_DRAW_FRAMEBUFFER) -- fbo(framebuffer) ---------- COLOR_ATTACHMENT0 -glFramebufferTexture2D- texture_x
+ *                                                      |-------glDrawBuffers------ ...
+ *                                                      ----------------------- COLOR_ATTACHMENTi -glFramebufferTexture2D- texture_y
+ */
 
-struct framebuffer_t {
-    GLenum current_target;
-    struct attachment_t* draw_attachment;
-    struct attachment_t* read_attachment;
-};
+#ifdef __cplusplus
+extern "C" {
+#endif
 
-extern struct framebuffer_t* bound_framebuffer;
+
+//struct framebuffer_t {
+//    GLenum current_target;
+//    struct attachment_t *draw_attachment;
+//    struct attachment_t *read_attachment;
+//};
+//
+//extern struct framebuffer_t *bound_framebuffer;
 
 GLint getMaxDrawBuffers();
 
-void rebind_framebuffer(GLenum old_attachment, GLenum target_attachment);
+//void rebind_framebuffer(GLenum old_attachment, GLenum target_attachment);
 
 GLAPI GLAPIENTRY void glBindFramebuffer(GLenum target, GLuint framebuffer);
 
-GLAPI GLAPIENTRY void glFramebufferTexture2D(GLenum target, GLenum attachment, GLenum textarget, GLuint texture, GLint level);
+GLAPI GLAPIENTRY void
+glFramebufferTexture2D(GLenum target, GLenum attachment, GLenum textarget, GLuint texture,
+                       GLint level);
+
+GLAPI GLAPIENTRY void glDrawBuffer(GLenum buf);
+
+GLAPI GLAPIENTRY void glDrawBuffers(GLsizei n, const GLenum *bufs);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif //MOBILEGLUES_FRAMEBUFFER_H

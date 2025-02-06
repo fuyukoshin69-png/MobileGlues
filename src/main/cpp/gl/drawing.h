@@ -21,10 +21,6 @@
 
 GLAPI GLAPIENTRY void glMultiDrawElementsBaseVertex( GLenum mode, GLsizei *counts, GLenum type, const void * const *indices, GLsizei primcount, const GLint * basevertex);
 
-GLAPI GLAPIENTRY void glDrawBuffer(GLenum buf);
-
-GLAPI GLAPIENTRY void glDrawBuffers(GLsizei n, const GLenum *bufs);
-
 GLAPI GLAPIENTRY void glMultiDrawElements(GLenum mode,const GLsizei * count,GLenum type,const void * const * indices,GLsizei primcount);
 
 #endif //MOBILEGLUES_DRAWING_H
