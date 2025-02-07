@@ -43,6 +43,7 @@ GLint getMaxDrawBuffers() {
     return MAX_DRAW_BUFFERS;
 }
 
+std::vector<GLenum> new_attachments;
 void es_rebind_framebuffer() {
     LOAD_GLES(glBindFramebuffer, void, GLenum target, GLuint framebuffer)
     LOAD_GLES(glFramebufferTexture2D, void, GLenum target, GLenum attachment, GLenum textarget, GLuint texture, GLint level)
@@ -67,7 +68,7 @@ void es_rebind_framebuffer() {
             gles_glDrawBuffers(1, fbo.attachments.data());
         } else {
             // expect having COLOR_ATTACHMENTSi here
-            std::vector<GLenum> new_attachments(fbo.attachments.size(), GL_NONE);
+            new_attachments.resize(fbo.attachments.size(), GL_NONE);
             for (size_t i = 0; i < fbo.attachments.size(); ++i) {
                 if (fbo.attachments[i] == GL_NONE)
                     new_attachments[i] = GL_NONE;
