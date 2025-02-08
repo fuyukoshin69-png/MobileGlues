@@ -6,6 +6,7 @@
 #define FOLD_CRAFT_LAUNCHER_EGL_LOADER_H
 
 #include "egl.h"
+#include "../gl/log.h"
 
 typedef EGLBoolean (*eglBindAPI_PTR)(EGLenum api);
 typedef EGLBoolean (*eglBindTexImage_PTR)(EGLDisplay dpy, EGLSurface surface, EGLint buffer);
@@ -87,27 +88,27 @@ struct egl_func_t {
     eglWaitNative_PTR eglWaitNative;
 };
 
-/*
-struct egl_func_t {
-    EGLGETPROCADDRESSPROCP eglGetProcAddress;
-    EGLCREATECONTEXTPROCP eglCreateContext;
-    EGLDESTROYCONTEXTPROCP eglDestroyContext;
-    EGLMAKECURRENTPROCP eglMakeCurrent;
-    EGLQUERYSTRINGPROCP eglQueryString;
-    EGLTERMINATEPROCP eglTerminate;
-    EGLCHOOSECONFIGPROCP eglChooseConfig;
-    EGLBINDAPIPROCP eglBindAPI;
-    EGLINITIALIZEPROCP eglInitialize;
-    EGLGETDISPLAYP eglGetDisplay;
-    EGLCREATEPBUFFERSURFACEPROCP eglCreatePbufferSurface;
-    EGLDESTROYSURFACEPROCP eglDestroySurface;
-    EGLGETERRORPROCP eglGetError;
-    EGLCREATEWINDOWSURFACEPROCP eglCreateWindowSurface;
-};
-EGLContext mglues_eglCreateContext(EGLDisplay dpy, EGLConfig config, EGLContext share_context, const EGLint *attrib_list);
-EGLBoolean mglues_eglDestroyContext(EGLDisplay dpy, EGLContext ctx);
-EGLBoolean mglues_eglMakeCurrent(EGLDisplay dpy, EGLSurface draw, EGLSurface read, EGLContext ctx);
-*/
+#define WARN_EGL_NULL(name) \
+if (g_egl_func.name == NULL) { \
+    LOG_W("%s line %d function %s: " #name " is NULL\n", __FILE__, __LINE__, __func__); \
+}
+
+#if GLOBAL_DEBUG
+#define INIT_EGL_FUNC(name) \
+{                                                             \
+        LOG_D("INIT_EGL_FUNC(%s)", #name);                       \
+        g_egl_func.name = (name##_PTR)proc_address(egl, #name); \
+        WARN_EGL_NULL(name)                                      \
+}
+#else
+#define INIT_EGL_FUNC(name) \
+{                                                             \
+        g_egl_func.name = (name##_PTR)proc_address(egl, #name); \
+}
+#endif
+
+#define LOAD_EGL_FUNC(name) \
+    name##_PTR egl_##name = g_egl_func.name;
 
 void init_target_egl();
 

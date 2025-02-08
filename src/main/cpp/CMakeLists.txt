@@ -40,6 +40,7 @@ add_library(${CMAKE_PROJECT_NAME} SHARED
         glx/lookup.c
         egl/egl.c
         egl/loader.c
+        egl/egl_native.c
         gles/loader.c
         config/cJSON.c
         config/config.c

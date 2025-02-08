@@ -12,25 +12,41 @@
 
 #define DEBUG 0
 
+struct egl_func_t g_egl_func;
+
 void init_target_egl() {
     LOG_D("Initializing %s @ %s", RENDERERNAME, __FUNCTION__);
     EGLDisplay eglDisplay = EGL_NO_DISPLAY;
     EGLSurface eglSurface = EGL_NO_SURFACE;
     EGLContext eglContext = EGL_NO_CONTEXT;
 
-    LOAD_EGL(eglGetProcAddress);
-    LOAD_EGL(eglBindAPI);
-    LOAD_EGL(eglInitialize);
-    LOAD_EGL(eglGetDisplay);
-    LOAD_EGL(eglCreatePbufferSurface);
-    LOAD_EGL(eglDestroySurface);
-    LOAD_EGL(eglDestroyContext);
-    LOAD_EGL(eglMakeCurrent);
-    LOAD_EGL(eglChooseConfig);
-    LOAD_EGL(eglCreateContext);
-    LOAD_EGL(eglQueryString);
-    LOAD_EGL(eglTerminate);
-    LOAD_EGL(eglGetError);
+    INIT_EGL_FUNC(eglGetProcAddress);
+    INIT_EGL_FUNC(eglBindAPI);
+    INIT_EGL_FUNC(eglInitialize);
+    INIT_EGL_FUNC(eglGetDisplay);
+    INIT_EGL_FUNC(eglCreatePbufferSurface);
+    INIT_EGL_FUNC(eglDestroySurface);
+    INIT_EGL_FUNC(eglDestroyContext);
+    INIT_EGL_FUNC(eglMakeCurrent);
+    INIT_EGL_FUNC(eglChooseConfig);
+    INIT_EGL_FUNC(eglCreateContext);
+    INIT_EGL_FUNC(eglQueryString);
+    INIT_EGL_FUNC(eglTerminate);
+    INIT_EGL_FUNC(eglGetError);
+
+    LOAD_EGL_FUNC(eglGetProcAddress);
+    LOAD_EGL_FUNC(eglBindAPI);
+    LOAD_EGL_FUNC(eglInitialize);
+    LOAD_EGL_FUNC(eglGetDisplay);
+    LOAD_EGL_FUNC(eglCreatePbufferSurface);
+    LOAD_EGL_FUNC(eglDestroySurface);
+    LOAD_EGL_FUNC(eglDestroyContext);
+    LOAD_EGL_FUNC(eglMakeCurrent);
+    LOAD_EGL_FUNC(eglChooseConfig);
+    LOAD_EGL_FUNC(eglCreateContext);
+    LOAD_EGL_FUNC(eglQueryString);
+    LOAD_EGL_FUNC(eglTerminate);
+    LOAD_EGL_FUNC(eglGetError);
 
     eglDisplay = egl_eglGetDisplay(EGL_DEFAULT_DISPLAY);
     if (eglDisplay == EGL_NO_DISPLAY) {

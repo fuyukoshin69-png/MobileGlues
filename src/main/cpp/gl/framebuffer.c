@@ -9,6 +9,10 @@
 
 struct framebuffer_t* bound_framebuffer;
 
+GLuint draw_fbo = 0;
+GLuint read_fbo = 0;
+
+
 GLint MAX_DRAW_BUFFERS = 0;
 
 GLint getMaxDrawBuffers() {
@@ -58,16 +62,20 @@ void glBindFramebuffer(GLenum target, GLuint framebuffer) {
         case GL_DRAW_FRAMEBUFFER:
             free(bound_framebuffer->draw_attachment);
             bound_framebuffer->draw_attachment = malloc(getMaxDrawBuffers() * sizeof(struct attachment_t));
+            draw_fbo = framebuffer;
             break;
         case GL_READ_FRAMEBUFFER:
             free(bound_framebuffer->read_attachment);
             bound_framebuffer->read_attachment = malloc(getMaxDrawBuffers() * sizeof(struct attachment_t));
+            read_fbo = framebuffer;
             break;
         case GL_FRAMEBUFFER:
             free(bound_framebuffer->draw_attachment);
             bound_framebuffer->draw_attachment = malloc(getMaxDrawBuffers() * sizeof(struct attachment_t));
             free(bound_framebuffer->read_attachment);
             bound_framebuffer->read_attachment = malloc(getMaxDrawBuffers() * sizeof(struct attachment_t));
+            draw_fbo = framebuffer;
+            read_fbo = framebuffer;
             break;
         default:
             break;
