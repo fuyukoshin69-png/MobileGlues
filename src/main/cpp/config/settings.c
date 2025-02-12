@@ -2,15 +2,84 @@
 // Created by hanji on 2025/2/9.
 //
 
+#include <android/dlext.h>
 #include "settings.h"
 #include "config.h"
 #include "../gl/log.h"
 #include "../gl/envvars.h"
 #include "gpu_utils.h"
 
+#include "inttypes.h"
+#include "nsbypass.h"
+
 #define DEBUG 0
 
 struct global_settings_t global_settings;
+
+void* loadTurnipVulkan() {
+    const char* native_dir = getenv("DRIVER_PATH");
+    const char* cache_dir = getenv("TMPDIR");
+
+    if (!native_dir)
+        return NULL;
+
+    if (!linker_ns_load(native_dir))
+        return NULL;
+
+    void* linkerhook = linker_ns_dlopen("liblinkerhook.so", RTLD_LOCAL | RTLD_NOW);
+    if (!linkerhook)
+        return NULL;
+
+    void* turnip_driver_handle = linker_ns_dlopen("libvulkan_freedreno.so", RTLD_LOCAL | RTLD_NOW);
+    if (!turnip_driver_handle) {
+        dlclose(linkerhook);
+        return NULL;
+    }
+
+    void* dl_android = linker_ns_dlopen("libdl_android.so", RTLD_LOCAL | RTLD_LAZY);
+    if (!dl_android) {
+        dlclose(linkerhook);
+        dlclose(turnip_driver_handle);
+        return NULL;
+    }
+
+    void* android_get_exported_namespace = dlsym(dl_android, "android_get_exported_namespace");
+    void (*linkerhookPassHandles)(void*, void*, void*) = dlsym(linkerhook, "linker_hook_set_handles");
+
+    if (!linkerhookPassHandles || !android_get_exported_namespace) {
+        dlclose(dl_android);
+        dlclose(linkerhook);
+        dlclose(turnip_driver_handle);
+        return NULL;
+    }
+
+    linkerhookPassHandles(turnip_driver_handle, android_dlopen_ext, android_get_exported_namespace);
+
+    void* libvulkan = linker_ns_dlopen_unique(cache_dir, "libvulkan.so", RTLD_LOCAL | RTLD_NOW);
+    if (!libvulkan) {
+        dlclose(dl_android);
+        dlclose(linkerhook);
+        dlclose(turnip_driver_handle);
+        return NULL;
+    }
+
+    return libvulkan;
+}
+
+static void set_vulkan_ptr(void* ptr) {
+    char envval[64];
+    sprintf(envval, "%"PRIxPTR, (uintptr_t)ptr);
+    setenv("VULKAN_PTR", envval, 1);
+}
+
+void load_vulkan() {
+    void* result = loadTurnipVulkan();
+    if(result != NULL) {
+        printf("AdrenoSupp: Loaded Turnip, loader address: %p\n", result);
+        set_vulkan_ptr(result);
+        return;
+    }
+}
 
 void init_settings() {
     int success = initialized;
@@ -68,6 +137,7 @@ void init_settings() {
     if (global_settings.angle) {
         setenv("LIBGL_GLES", "libGLESv2_angle.so", 1);
         setenv("LIBGL_EGL", "libEGL_angle.so", 1);
+        load_vulkan();
     }
 
     if (enableNoError == 1 || enableNoError == 2 || enableNoError == 3) {

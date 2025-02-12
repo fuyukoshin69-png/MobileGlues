@@ -44,6 +44,7 @@ add_library(${CMAKE_PROJECT_NAME} SHARED
         config/cJSON.c
         config/config.c
         config/gpu_utils.c
+        config/nsbypass.c
         config/settings.c
 )
 
