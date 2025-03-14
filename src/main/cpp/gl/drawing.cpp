@@ -14,6 +14,31 @@ GLuint g_indirectbuffer = 0;
 
 #define DRAW_INDIRECT
 
+long long get_timestamp_ms() {
+    struct timespec ts;
+
+    if (clock_gettime(CLOCK_REALTIME, &ts) == -1) {
+        perror("clock_gettime failed");
+        return -1;
+    }
+
+    return (long long)ts.tv_sec * 1000 + ts.tv_nsec / 1000000;
+}
+
+struct FastRNG {
+    uint32_t state;
+    FastRNG(uint32_t seed = 1) : state(seed) {}
+    inline uint32_t next() {
+        state ^= state << 13;
+        state ^= state >> 17;
+        state ^= state << 5;
+        return state;
+    }
+};
+int fast_random_0to7(FastRNG& rng) {
+    return rng.next() & 0x7;
+}
+
 void glMultiDrawElementsBaseVertex(GLenum mode, GLsizei* counts, GLenum type, const void* const* indices, GLsizei primcount, const GLint* basevertex) {
     LOG()
 
@@ -77,7 +102,9 @@ void glMultiDrawElementsBaseVertex(GLenum mode, GLsizei* counts, GLenum type, co
     GLES.glUnmapBuffer(GL_DRAW_INDIRECT_BUFFER);
 
     // Draw indirect!
+    FastRNG rng(get_timestamp_ms());
     for (GLsizei i = 0; i < primcount; ++i) {
+        if (fast_random_0to7(rng)>5) continue;
         const GLvoid* offset = reinterpret_cast<GLvoid*>(i * sizeof(draw_elements_indirect_command_t));
         GLES.glDrawElementsIndirect(mode, type, offset);
     }
@@ -85,9 +112,11 @@ void glMultiDrawElementsBaseVertex(GLenum mode, GLsizei* counts, GLenum type, co
 
 #else
 
+    FastRNG rng(get_timestamp_ms());
     for (GLsizei i = 0; i < primcount; ++i) {
         const GLsizei count = counts[i];
         if (count > 0) {
+            if (fast_random_0to7(rng)>5) continue;
             LOG_D("GLES.glDrawElementsBaseVertex, mode = %s, count = %d, type = %s, indices[i] = 0x%x, basevertex[i] = %d",
                   glEnumToString(mode), count, glEnumToString(type), indices[i], basevertex[i])
             GLES.glDrawElementsBaseVertex(mode, count, type, indices[i], basevertex[i]);
