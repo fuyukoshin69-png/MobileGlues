@@ -110,3 +110,18 @@ void glGetNamedBufferSubData(GLuint buffer, GLintptr offset, GLsizeiptr size, vo
 
     RESTORE_BUFFER_CTX(GL_COPY_READ_BUFFER)
 }
+
+void* glMapNamedBufferRange(GLuint buffer, GLintptr offset, GLsizeiptr length, GLbitfield access) {
+    LOG()
+    LOG_D("glMapNamedBufferRange, buffer = %d, offset = %d, length = %d, access = 0x%x",
+          buffer, offset, length, access)
+    INIT_CHECK_GL_ERROR
+
+    SAVE_BUFFER_CTX(GL_COPY_READ_BUFFER)
+
+    void* ptr = GLES.glMapBufferRange(GL_COPY_READ_BUFFER, offset, length, access);
+
+    RESTORE_BUFFER_CTX(GL_COPY_READ_BUFFER)
+
+    return ptr;
+}

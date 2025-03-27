@@ -29,6 +29,8 @@ GLAPI GLAPIENTRY void glGetNamedBufferPointerv(GLuint buffer, GLenum pname, void
 
 GLAPI GLAPIENTRY void glGetNamedBufferSubData(GLuint buffer, GLintptr offset, GLsizeiptr size, void* data);
 
+GLAPI GLAPIENTRY void* glMapNamedBufferRange(GLuint buffer, GLintptr offset, GLsizeiptr length, GLbitfield access);
+
 #ifdef __cplusplus
 }
 #endif
