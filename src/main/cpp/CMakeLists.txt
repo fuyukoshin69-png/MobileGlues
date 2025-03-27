@@ -53,6 +53,7 @@ add_library(${CMAKE_PROJECT_NAME} SHARED
         config/settings.cpp
 
         gl/dsa/buffer.cpp
+        gl/dsa/framebuffer.cpp
 )
 
 target_include_directories(${CMAKE_PROJECT_NAME} PRIVATE ./includes)
