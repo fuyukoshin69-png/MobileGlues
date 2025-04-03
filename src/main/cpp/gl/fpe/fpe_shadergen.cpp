@@ -107,11 +107,9 @@ std::string type2str(GLenum type, int size) {
         switch (type) {
             case GL_UNSIGNED_BYTE:
             case GL_UNSIGNED_INT:
-//                return "uint";
             case GL_BYTE:
             case GL_SHORT:
             case GL_INT:
-//                return "int";
             case GL_FLOAT:
                 return "float";
             case GL_DOUBLE:
@@ -123,11 +121,9 @@ std::string type2str(GLenum type, int size) {
         switch (type) {
             case GL_UNSIGNED_BYTE:
             case GL_UNSIGNED_INT:
-//                return "uvec" + std::to_string(size);
             case GL_BYTE:
             case GL_SHORT:
             case GL_INT:
-//                return "ivec" + std::to_string(size);
             case GL_FLOAT:
                 return "vec" + std::to_string(size);
             case GL_DOUBLE:
@@ -207,7 +203,6 @@ void add_vs_uniforms(const fixed_function_state_t& state, scratch_t& scratch, st
 void add_vs_body(const fixed_function_state_t& state, scratch_t& scratch, std::string& vs) {
     vs +=
             "void main() {\n"
-//            "   gl_Position = ProjMat * ModelViewMat * vec4(Position, 1.0);\n";
             "    gl_Position = ModelViewProjMat * vec4(Position, 1.0);\n";
     if (state.fpe_bools.fog_enable) {
         vs += "    vec4 viewPosition = ModelViewMat * vec4(Position, 1.0);\n"

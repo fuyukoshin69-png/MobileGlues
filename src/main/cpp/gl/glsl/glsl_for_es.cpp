@@ -15,10 +15,11 @@
 #include <algorithm>
 #include "cache.h"
 #include "../../version.h"
+#include "glslconv_gl4es.h"
 
 //#define FEATURE_PRE_CONVERTED_GLSL
 
-#define DEBUG 0
+#define DEBUG 1
 
 char* (*MesaConvertShader)(const char *src, unsigned int type, unsigned int glsl, unsigned int essl);
 
@@ -731,7 +732,15 @@ std::string GLSLtoGLSLES(const char* glsl_code, GLenum glsl_type, uint essl_vers
     }
     
     int return_code = -1;
-    std::string converted = glsl_version<140? GLSLtoGLSLES_1(glsl_code, glsl_type, essl_version, return_code):GLSLtoGLSLES_2(glsl_code, glsl_type, essl_version, return_code);
+    std::string converted;
+    if (glsl_version<140) {
+        converted = GLSLtoGLSLES_1(glsl_code, glsl_type, essl_version, return_code);
+        int status = testGenericShader(glsl_type, (char *)converted.c_str());
+        if (!status)
+            converted = GLSLtoGLSLES_3(glsl_code, glsl_type, essl_version, return_code);
+    } else {
+        converted = GLSLtoGLSLES_2(glsl_code, glsl_type, essl_version, return_code);
+    }
     if (return_code == 0 && !converted.empty()) {
         converted = process_uniform_declarations(converted);
         Cache::get_instance().put(sha256_string.c_str(), converted.c_str());
@@ -1048,4 +1057,33 @@ std::string GLSLtoGLSLES_1(const char *glsl_code, GLenum glsl_type, uint esversi
 //    strcpy(ret, result);
     return_code = 0;
     return result;
+}
+
+std::string GLSLtoGLSLES_3(const char *glsl_code, GLenum glsl_type, uint essl_version, int& return_code) {
+    LOG_W("Warning: use gl4es shaderconv to convert shader.")
+    shaderconv_need_t need;
+    need.need_texcoord = -1;
+    int shaderCompileStatus;
+
+    char * converted;
+    
+    // First, vanilla gl4es, no forward port
+    converted = ConvertShader((char *)glsl_code, glsl_type == GL_VERTEX_SHADER ? 1 : 0,&need, 0);
+    shaderCompileStatus = testGenericShader(glsl_type, (char*)glsl_code);
+
+    // Then, attempt back porting if desired of constrained to do so
+    if(!shaderCompileStatus) {
+        converted = ConvertShader((char *)glsl_code, glsl_type == GL_VERTEX_SHADER ? 1 : 0,&need, 0);
+        converted = ConvertShaderVgpu(converted, glsl_type);
+        shaderCompileStatus = testGenericShader(glsl_type, (char*)glsl_code);
+    }
+
+    // At last resort, use forward porting
+    if(!shaderCompileStatus){
+        converted = ConvertShader((char *)glsl_code, glsl_type == GL_VERTEX_SHADER ? 1 : 0, &need, 1);
+        converted = ConvertShaderVgpu(converted, glsl_type);
+    }
+    LOG_D("converted:\n%s", converted)
+    return_code = 0;
+    return std::string(converted);
 }
