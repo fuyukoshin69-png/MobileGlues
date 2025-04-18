@@ -8,9 +8,10 @@
 #include "../gl/log.h"
 #include "../gl/envvars.h"
 #include "gpu_utils.h"
-
 #include <cinttypes>
+#include <vector>
 #include "nsbypass.h"
+#include "vulkan/vulkan_core.h"
 
 #define DEBUG 0
 
@@ -21,26 +22,26 @@ void* loadTurnipVulkan() {
     const char* cache_dir = getenv("TMPDIR");
 
     if (!native_dir)
-        return NULL;
+        return nullptr;
 
     if (!linker_ns_load(native_dir))
-        return NULL;
+        return nullptr;
 
     void* linkerhook = linker_ns_dlopen("liblinkerhook.so", RTLD_LOCAL | RTLD_NOW);
     if (!linkerhook)
-        return NULL;
+        return nullptr;
 
     void* turnip_driver_handle = linker_ns_dlopen("libvulkan_freedreno.so", RTLD_LOCAL | RTLD_NOW);
     if (!turnip_driver_handle) {
         dlclose(linkerhook);
-        return NULL;
+        return nullptr;
     }
 
     void* dl_android = linker_ns_dlopen("libdl_android.so", RTLD_LOCAL | RTLD_LAZY);
     if (!dl_android) {
         dlclose(linkerhook);
         dlclose(turnip_driver_handle);
-        return NULL;
+        return nullptr;
     }
 
     void* android_get_exported_namespace = dlsym(dl_android, "android_get_exported_namespace");
@@ -49,7 +50,7 @@ void* loadTurnipVulkan() {
         dlclose(dl_android);
         dlclose(linkerhook);
         dlclose(turnip_driver_handle);
-        return NULL;
+        return nullptr;
     }
 
     linkerhookPassHandles(turnip_driver_handle, android_dlopen_ext, android_get_exported_namespace);
@@ -59,10 +60,138 @@ void* loadTurnipVulkan() {
         dlclose(dl_android);
         dlclose(linkerhook);
         dlclose(turnip_driver_handle);
-        return NULL;
+        return nullptr;
     }
 
     return libvulkan;
+}
+
+int show_vk_v() {
+    const char *envval = getenv("VULKAN_PTR");
+    if (!envval) {
+        printf( "VULKAN_PTR environment variable not set\n");
+        return 1;
+    }
+    uintptr_t ptr_value;
+    if (sscanf(envval, "%" SCNxPTR, &ptr_value) != 1) {
+        printf( "Failed to parse VULKAN_PTR value\n");
+        return 1;
+    }
+    void *vulkan_handle = (void *)ptr_value;
+
+    auto TvkGetInstanceProcAddr = (PFN_vkGetInstanceProcAddr)dlsym(vulkan_handle, "vkGetInstanceProcAddr");
+    if (!TvkGetInstanceProcAddr) {
+        printf( "Failed to get TvkGetInstanceProcAddr: %s\n", dlerror());
+        return 1;
+    }
+
+    VkApplicationInfo appInfo = {};
+    appInfo.sType = VK_STRUCTURE_TYPE_APPLICATION_INFO;
+    appInfo.pApplicationName = "Vulkan Query";
+    appInfo.applicationVersion = VK_MAKE_VERSION(1, 0, 0);
+    appInfo.pEngineName = "No Engine";
+    appInfo.engineVersion = VK_MAKE_VERSION(1, 0, 0);
+    appInfo.apiVersion = VK_API_VERSION_1_0;
+
+    VkInstanceCreateInfo createInfo = {};
+    createInfo.sType = VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO;
+    createInfo.pApplicationInfo = &appInfo;
+
+    auto TvkCreateInstance = (PFN_vkCreateInstance)TvkGetInstanceProcAddr(nullptr, "vkCreateInstance");
+    if (!TvkCreateInstance) {
+        printf( "Failed to get TvkCreateInstance: %s\n", dlerror());
+        return 1;
+    }
+
+    VkInstance instance;
+    if (TvkCreateInstance(&createInfo, nullptr, &instance) != VK_SUCCESS) {
+        printf( "Failed to create Vulkan instance\n");
+        return 1;
+    }
+    
+    uint32_t version;
+    auto TvkEnumerateInstanceVersion = (PFN_vkEnumerateInstanceVersion)TvkGetInstanceProcAddr(nullptr, "vkEnumerateInstanceVersion");
+    if (TvkEnumerateInstanceVersion) {
+        if (TvkEnumerateInstanceVersion(&version) != VK_SUCCESS) {
+            version = VK_API_VERSION_1_0;
+        }
+    } else {
+        version = VK_API_VERSION_1_0;
+    }
+
+    printf("Vulkan API Version: %d.%d.%d\n",
+           VK_VERSION_MAJOR(version),
+           VK_VERSION_MINOR(version),
+           VK_VERSION_PATCH(version));
+
+    auto TvkEnumeratePhysicalDevices = (PFN_vkEnumeratePhysicalDevices)TvkGetInstanceProcAddr(instance, "vkEnumeratePhysicalDevices");
+    if (!TvkEnumeratePhysicalDevices) {
+        printf("vkEnumeratePhysicalDevices not available\n");
+
+        auto TvkDestroyInstance = (PFN_vkDestroyInstance)TvkGetInstanceProcAddr(instance, "vkDestroyInstance");
+        if (TvkDestroyInstance) TvkDestroyInstance(instance, nullptr);
+        return 1;
+    }
+
+    uint32_t deviceCount = 0;
+    TvkEnumeratePhysicalDevices(instance, &deviceCount, nullptr);
+    if (deviceCount == 0) {
+        printf("No Vulkan devices found\n");
+
+        auto TvkDestroyInstance = (PFN_vkDestroyInstance)TvkGetInstanceProcAddr(instance, "vkDestroyInstance");
+        if (TvkDestroyInstance) TvkDestroyInstance(instance, nullptr);
+        return 1;
+    }
+
+    std::vector<VkPhysicalDevice> devices(deviceCount);
+    TvkEnumeratePhysicalDevices(instance, &deviceCount, devices.data());
+
+    auto TvkGetPhysicalDeviceProperties = (PFN_vkGetPhysicalDeviceProperties)TvkGetInstanceProcAddr(instance, "vkGetPhysicalDeviceProperties");
+    if (!TvkGetPhysicalDeviceProperties) {
+        printf("Cannot get device properties\n");
+
+        auto TvkDestroyInstance = (PFN_vkDestroyInstance)TvkGetInstanceProcAddr(instance, "vkDestroyInstance");
+        if (TvkDestroyInstance) TvkDestroyInstance(instance, nullptr);
+        return 1;
+    }
+
+    printf("\nFound %d Vulkan devices:\n", deviceCount);
+    for (uint32_t i = 0; i < deviceCount; i++) {
+        VkPhysicalDeviceProperties deviceProperties;
+        TvkGetPhysicalDeviceProperties(devices[i], &deviceProperties);
+
+        printf("\nDevice %d:\n", i+1);
+        printf("  Name: %s\n", deviceProperties.deviceName);
+        printf("  API Version: %d.%d.%d\n",
+               VK_VERSION_MAJOR(deviceProperties.apiVersion),
+               VK_VERSION_MINOR(deviceProperties.apiVersion),
+               VK_VERSION_PATCH(deviceProperties.apiVersion));
+        printf("  Driver Version: %d.%d.%d\n",
+               VK_VERSION_MAJOR(deviceProperties.driverVersion),
+               VK_VERSION_MINOR(deviceProperties.driverVersion),
+               VK_VERSION_PATCH(deviceProperties.driverVersion));
+        std::string deviceTypeToString(VkPhysicalDeviceType type);
+        printf("  Device Type: %s\n", deviceTypeToString(deviceProperties.deviceType).c_str());
+    }
+
+    auto TvkDestroyInstance = (PFN_vkDestroyInstance)TvkGetInstanceProcAddr(instance, "vkDestroyInstance");
+    if (TvkDestroyInstance) {
+        TvkDestroyInstance(instance, nullptr);
+    } else {
+        printf("Warning: vkDestroyInstance not found\n");
+    }
+
+    return 0;
+}
+
+std::string deviceTypeToString(VkPhysicalDeviceType type) {
+    switch (type) {
+        case VK_PHYSICAL_DEVICE_TYPE_INTEGRATED_GPU: return "Integrated GPU";
+        case VK_PHYSICAL_DEVICE_TYPE_DISCRETE_GPU: return "Discrete GPU";
+        case VK_PHYSICAL_DEVICE_TYPE_VIRTUAL_GPU: return "Virtual GPU";
+        case VK_PHYSICAL_DEVICE_TYPE_CPU: return "CPU";
+        default: return "Other";
+    }
 }
 
 static void set_vulkan_ptr(void* ptr) {
@@ -73,9 +202,10 @@ static void set_vulkan_ptr(void* ptr) {
 
 void load_vulkan() {
     void* result = loadTurnipVulkan();
-    if(result != NULL) {
+    if(result != nullptr) {
         printf("AdrenoSupp: Loaded Turnip, loader address: %p\n", result);
         set_vulkan_ptr(result);
+        show_vk_v();
         return;
     }
 }
@@ -146,7 +276,7 @@ void init_settings() {
         int isQcom = isAdreno(gpuString);
         int is740 = isAdreno740(gpuString);
         //int is830 = isAdreno830(gpuString);
-        int hasVk13 = hasVulkan13();
+        int hasVk13 = 1;
 
         LOG_D("Is Adreno? = %s", isQcom ? "true" : "false")
         //LOG_D("Is Adreno 830? = %s", is830 ? "true" : "false")

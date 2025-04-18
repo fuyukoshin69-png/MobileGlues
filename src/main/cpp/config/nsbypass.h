@@ -7,8 +7,18 @@
 
 #include <stdbool.h>
 
-bool linker_ns_load(const char* lib_search_path);
-void* linker_ns_dlopen(const char* name, int flag);
-void* linker_ns_dlopen_unique(const char* tmpdir, const char* name, int flag);
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+bool linker_ns_load(const char *lib_search_path);
+
+void *linker_ns_dlopen(const char *name, int flag);
+
+void *linker_ns_dlopen_unique(const char *tmpdir, const char *name, int flag);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif //MOBILEGLUES_PLUGIN_NSBYPASS_H
