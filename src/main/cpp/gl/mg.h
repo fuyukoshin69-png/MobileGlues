@@ -5,9 +5,9 @@
 #ifndef MOBILEGLUES_MG_H
 #define MOBILEGLUES_MG_H
 
-#include <string.h>
+#include <cstring>
 #include <malloc.h>
-#include <stdlib.h>
+#include <cstdlib>
 #include <android/log.h>
 
 #include "gl.h"

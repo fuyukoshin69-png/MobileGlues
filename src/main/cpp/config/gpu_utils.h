@@ -5,12 +5,24 @@
 #ifndef MOBILEGLUES_PLUGIN_GPU_UTILS_H
 #define MOBILEGLUES_PLUGIN_GPU_UTILS_H
 
-const char* getGPUInfo();
+#include <string.h>
 
-int isAdreno740(const char* gpu);
+#ifdef __cplusplus
+extern "C" {
+#endif
 
-int isAdreno830(const char* gpu);
+const char *getGPUInfo();
+
+int isAdreno(const char *gpu);
+
+int isAdreno740(const char *gpu);
+
+int isAdreno830(const char *gpu);
 
 int hasVulkan13();
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif //MOBILEGLUES_PLUGIN_GPU_UTILS_H

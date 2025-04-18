@@ -9,10 +9,13 @@
 #define VERSION_RELEASE 2
 
 #define MAJOR 1
-#define MINOR 0
-#define REVISION 1
+#define MINOR 2
+#define REVISION 4
+#define PATCH 0
 
-const int version_type = VERSION_RELEASE;
+#define VERSION_TYPE VERSION_RELEASE
+
+#define VERSION_SUFFIX ""
 
 #define MOBILEGLUES_VERSION_H
 

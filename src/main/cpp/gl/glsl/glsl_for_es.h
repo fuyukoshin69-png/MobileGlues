@@ -6,17 +6,20 @@
 #include "../glcorearb.h"
 #include "../log.h"
 #include "../gles/loader.h"
+#include <string>
 
-#include <string.h>
 #ifdef __cplusplus
 extern "C" {
 #endif
 #include "../mg.h"
-    
-char *GLSLtoGLSLES_1(char *glsl_code, GLenum glsl_type, unsigned int esversion);
-char *GLSLtoGLSLES_2(char *glsl_code, GLenum glsl_type, uint essl_version);
-int getGLSLVersion(const char* glsl_code);
 #ifdef __cplusplus
 }
 #endif
+
+std::string getCachedESSL(const char* glsl_code, uint essl_version);
+std::string GLSLtoGLSLES(const char *glsl_code, GLenum glsl_type, uint esversion, uint glsl_version);
+std::string GLSLtoGLSLES_1(const char *glsl_code, GLenum glsl_type, uint esversion, int& return_code);
+std::string GLSLtoGLSLES_2(const char *glsl_code, GLenum glsl_type, uint essl_version, int& return_code);
+int getGLSLVersion(const char* glsl_code);
+
 #endif

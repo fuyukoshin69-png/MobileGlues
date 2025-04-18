@@ -12,6 +12,10 @@
 #define GL_FUNC_TYPEDEF(type,name,...) \
  typedef type (APIENTRY_GLES *name##_PTR)(__VA_ARGS__);
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 GL_FUNC_TYPEDEF(void, glActiveTexture, GLenum texture)
 GL_FUNC_TYPEDEF(void, glAttachShader, GLuint program, GLuint shader)
 GL_FUNC_TYPEDEF(void, glBindAttribLocation, GLuint program, GLuint index, const GLchar *name)
@@ -23,9 +27,11 @@ GL_FUNC_TYPEDEF(void, glBlendColor, GLfloat red, GLfloat green, GLfloat blue, GL
 GL_FUNC_TYPEDEF(void, glBlendEquation, GLenum mode)
 GL_FUNC_TYPEDEF(void, glBlendEquationSeparate, GLenum modeRGB, GLenum modeAlpha)
 GL_FUNC_TYPEDEF(void, glBlendFunc, GLenum sfactor, GLenum dfactor)
-GL_FUNC_TYPEDEF(void, glBlendFuncSeparate, GLenum sfactorRGB, GLenum dfactorRGB, GLenum sfactorAlpha, GLenum dfactorAlpha)
+GL_FUNC_TYPEDEF(void, glBlendFuncSeparate, GLenum sfactorRGB, GLenum dfactorRGB,
+                GLenum sfactorAlpha, GLenum dfactorAlpha)
 GL_FUNC_TYPEDEF(void, glBufferData, GLenum target, GLsizeiptr size, const void *data, GLenum usage)
-GL_FUNC_TYPEDEF(void, glBufferSubData, GLenum target, GLintptr offset, GLsizeiptr size, const void *data)
+GL_FUNC_TYPEDEF(void, glBufferSubData, GLenum target, GLintptr offset, GLsizeiptr size,
+                const void *data)
 GL_FUNC_TYPEDEF(GLenum, glCheckFramebufferStatus, GLenum target)
 GL_FUNC_TYPEDEF(void, glClear, GLbitfield mask)
 GL_FUNC_TYPEDEF(void, glClearColor, GLfloat red, GLfloat green, GLfloat blue, GLfloat alpha)
@@ -33,11 +39,16 @@ GL_FUNC_TYPEDEF(void, glClearDepthf, GLfloat d)
 GL_FUNC_TYPEDEF(void, glClearStencil, GLint s)
 GL_FUNC_TYPEDEF(void, glColorMask, GLboolean red, GLboolean green, GLboolean blue, GLboolean alpha)
 GL_FUNC_TYPEDEF(void, glCompileShader, GLuint shader)
-GL_FUNC_TYPEDEF(void, glCompressedTexImage2D, GLenum target, GLint level, GLenum internalformat, GLsizei width, GLsizei height, GLint border, GLsizei imageSize, const void *data)
-GL_FUNC_TYPEDEF(void, glCompressedTexSubImage2D, GLenum target, GLint level, GLint xoffset, GLint yoffset, GLsizei width, GLsizei height, GLenum format, GLsizei imageSize, const void *data)
+GL_FUNC_TYPEDEF(void, glCompressedTexImage2D, GLenum target, GLint level, GLenum internalformat,
+                GLsizei width, GLsizei height, GLint border, GLsizei imageSize, const void *data)
+GL_FUNC_TYPEDEF(void, glCompressedTexSubImage2D, GLenum target, GLint level, GLint xoffset,
+                GLint yoffset, GLsizei width, GLsizei height, GLenum format, GLsizei imageSize,
+                const void *data)
 //GL_FUNC_TYPEDEF(void, glCopyTexImage1D, GLenum target, GLint level, GLenum internalFormat, GLint x, GLint y, GLsizei width, GLint border);
-GL_FUNC_TYPEDEF(void, glCopyTexImage2D, GLenum target, GLint level, GLenum internalformat, GLint x, GLint y, GLsizei width, GLsizei height, GLint border)
-GL_FUNC_TYPEDEF(void, glCopyTexSubImage2D, GLenum target, GLint level, GLint xoffset, GLint yoffset, GLint x, GLint y, GLsizei width, GLsizei height)
+GL_FUNC_TYPEDEF(void, glCopyTexImage2D, GLenum target, GLint level, GLenum internalformat, GLint x,
+                GLint y, GLsizei width, GLsizei height, GLint border)
+GL_FUNC_TYPEDEF(void, glCopyTexSubImage2D, GLenum target, GLint level, GLint xoffset, GLint yoffset,
+                GLint x, GLint y, GLsizei width, GLsizei height)
 GL_FUNC_TYPEDEF(GLuint, glCreateProgram)
 GL_FUNC_TYPEDEF(GLuint, glCreateShader, GLenum type)
 GL_FUNC_TYPEDEF(void, glCullFace, GLenum mode)
@@ -59,33 +70,43 @@ GL_FUNC_TYPEDEF(void, glEnable, GLenum cap)
 GL_FUNC_TYPEDEF(void, glEnableVertexAttribArray, GLuint index)
 GL_FUNC_TYPEDEF(void, glFinish)
 GL_FUNC_TYPEDEF(void, glFlush)
-GL_FUNC_TYPEDEF(void, glFramebufferRenderbuffer, GLenum target, GLenum attachment, GLenum renderbuffertarget, GLuint renderbuffer)
-GL_FUNC_TYPEDEF(void, glFramebufferTexture2D, GLenum target, GLenum attachment, GLenum textarget, GLuint texture, GLint level)
+GL_FUNC_TYPEDEF(void, glFramebufferRenderbuffer, GLenum target, GLenum attachment,
+                GLenum renderbuffertarget, GLuint renderbuffer)
+GL_FUNC_TYPEDEF(void, glFramebufferTexture2D, GLenum target, GLenum attachment, GLenum textarget,
+                GLuint texture, GLint level)
 GL_FUNC_TYPEDEF(void, glFrontFace, GLenum mode)
 GL_FUNC_TYPEDEF(void, glGenBuffers, GLsizei n, GLuint *buffers)
 GL_FUNC_TYPEDEF(void, glGenerateMipmap, GLenum target)
 GL_FUNC_TYPEDEF(void, glGenFramebuffers, GLsizei n, GLuint *framebuffers)
 GL_FUNC_TYPEDEF(void, glGenRenderbuffers, GLsizei n, GLuint *renderbuffers)
 GL_FUNC_TYPEDEF(void, glGenTextures, GLsizei n, GLuint *textures)
-GL_FUNC_TYPEDEF(void, glGetActiveAttrib, GLuint program, GLuint index, GLsizei bufSize, GLsizei *length, GLint *size, GLenum *type, GLchar *name)
-GL_FUNC_TYPEDEF(void, glGetActiveUniform, GLuint program, GLuint index, GLsizei bufSize, GLsizei *length, GLint *size, GLenum *type, GLchar *name)
-GL_FUNC_TYPEDEF(void, glGetAttachedShaders, GLuint program, GLsizei maxCount, GLsizei *count, GLuint *shaders)
+GL_FUNC_TYPEDEF(void, glGetActiveAttrib, GLuint program, GLuint index, GLsizei bufSize,
+                GLsizei *length, GLint *size, GLenum *type, GLchar *name)
+GL_FUNC_TYPEDEF(void, glGetActiveUniform, GLuint program, GLuint index, GLsizei bufSize,
+                GLsizei *length, GLint *size, GLenum *type, GLchar *name)
+GL_FUNC_TYPEDEF(void, glGetAttachedShaders, GLuint program, GLsizei maxCount, GLsizei *count,
+                GLuint *shaders)
 GL_FUNC_TYPEDEF(GLint, glGetAttribLocation, GLuint program, const GLchar *name)
 GL_FUNC_TYPEDEF(void, glGetBooleanv, GLenum pname, GLboolean *data)
 GL_FUNC_TYPEDEF(void, glGetBufferParameteriv, GLenum target, GLenum pname, GLint *params)
 GL_FUNC_TYPEDEF(GLenum, glGetError)
-GL_FUNC_TYPEDEF(const GLubyte * , glGetString, GLenum)
-GL_FUNC_TYPEDEF(const GLubyte *, glGetStringi, GLenum, GLuint);
+GL_FUNC_TYPEDEF(const GLubyte *, glGetString, GLenum)
+GL_FUNC_TYPEDEF(const GLubyte *, glGetStringi, GLenum, GLuint)
 GL_FUNC_TYPEDEF(void, glGetFloatv, GLenum pname, GLfloat *data)
-GL_FUNC_TYPEDEF(void, glGetFramebufferAttachmentParameteriv, GLenum target, GLenum attachment, GLenum pname, GLint *params)
+GL_FUNC_TYPEDEF(void, glGetFramebufferAttachmentParameteriv, GLenum target, GLenum attachment,
+                GLenum pname, GLint *params)
 GL_FUNC_TYPEDEF(void, glGetIntegerv, GLenum pname, GLint *data)
 GL_FUNC_TYPEDEF(void, glGetProgramiv, GLuint program, GLenum pname, GLint *params)
-GL_FUNC_TYPEDEF(void, glGetProgramInfoLog, GLuint program, GLsizei bufSize, GLsizei *length, GLchar *infoLog)
+GL_FUNC_TYPEDEF(void, glGetProgramInfoLog, GLuint program, GLsizei bufSize, GLsizei *length,
+                GLchar *infoLog)
 GL_FUNC_TYPEDEF(void, glGetRenderbufferParameteriv, GLenum target, GLenum pname, GLint *params)
 GL_FUNC_TYPEDEF(void, glGetShaderiv, GLuint shader, GLenum pname, GLint *params)
-GL_FUNC_TYPEDEF(void, glGetShaderInfoLog, GLuint shader, GLsizei bufSize, GLsizei *length, GLchar *infoLog)
-GL_FUNC_TYPEDEF(void, glGetShaderPrecisionFormat, GLenum shadertype, GLenum precisiontype, GLint *range, GLint *precision)
-GL_FUNC_TYPEDEF(void, glGetShaderSource, GLuint shader, GLsizei bufSize, GLsizei *length, GLchar *source)
+GL_FUNC_TYPEDEF(void, glGetShaderInfoLog, GLuint shader, GLsizei bufSize, GLsizei *length,
+                GLchar *infoLog)
+GL_FUNC_TYPEDEF(void, glGetShaderPrecisionFormat, GLenum shadertype, GLenum precisiontype,
+                GLint *range, GLint *precision)
+GL_FUNC_TYPEDEF(void, glGetShaderSource, GLuint shader, GLsizei bufSize, GLsizei *length,
+                GLchar *source)
 GL_FUNC_TYPEDEF(void, glGetTexParameterfv, GLenum target, GLenum pname, GLfloat *params)
 GL_FUNC_TYPEDEF(void, glGetTexParameteriv, GLenum target, GLenum pname, GLint *params)
 GL_FUNC_TYPEDEF(void, glGetUniformfv, GLuint program, GLint location, GLfloat *params)
@@ -106,13 +127,17 @@ GL_FUNC_TYPEDEF(void, glLineWidth, GLfloat width)
 GL_FUNC_TYPEDEF(void, glLinkProgram, GLuint program)
 GL_FUNC_TYPEDEF(void, glPixelStorei, GLenum pname, GLint param)
 GL_FUNC_TYPEDEF(void, glPolygonOffset, GLfloat factor, GLfloat units)
-GL_FUNC_TYPEDEF(void, glReadPixels, GLint x, GLint y, GLsizei width, GLsizei height, GLenum format, GLenum type, void *pixels)
+GL_FUNC_TYPEDEF(void, glReadPixels, GLint x, GLint y, GLsizei width, GLsizei height, GLenum format,
+                GLenum type, void *pixels)
 GL_FUNC_TYPEDEF(void, glReleaseShaderCompiler)
-GL_FUNC_TYPEDEF(void, glRenderbufferStorage, GLenum target, GLenum internalformat, GLsizei width, GLsizei height)
+GL_FUNC_TYPEDEF(void, glRenderbufferStorage, GLenum target, GLenum internalformat, GLsizei width,
+                GLsizei height)
 GL_FUNC_TYPEDEF(void, glSampleCoverage, GLfloat value, GLboolean invert)
 GL_FUNC_TYPEDEF(void, glScissor, GLint x, GLint y, GLsizei width, GLsizei height)
-GL_FUNC_TYPEDEF(void, glShaderBinary, GLsizei count, const GLuint *shaders, GLenum binaryformat, const void *binary, GLsizei length)
-GL_FUNC_TYPEDEF(void, glShaderSource, GLuint shader, GLsizei count, const GLchar *const*string, const GLint *length)
+GL_FUNC_TYPEDEF(void, glShaderBinary, GLsizei count, const GLuint *shaders, GLenum binaryformat,
+                const void *binary, GLsizei length)
+GL_FUNC_TYPEDEF(void, glShaderSource, GLuint shader, GLsizei count, const GLchar *const *string,
+                const GLint *length)
 GL_FUNC_TYPEDEF(void, glStencilFunc, GLenum func, GLint ref, GLuint mask)
 GL_FUNC_TYPEDEF(void, glStencilFuncSeparate, GLenum face, GLenum func, GLint ref, GLuint mask)
 GL_FUNC_TYPEDEF(void, glStencilMask, GLuint mask)
@@ -120,13 +145,15 @@ GL_FUNC_TYPEDEF(void, glStencilMaskSeparate, GLenum face, GLuint mask)
 GL_FUNC_TYPEDEF(void, glStencilOp, GLenum fail, GLenum zfail, GLenum zpass)
 GL_FUNC_TYPEDEF(void, glStencilOpSeparate, GLenum face, GLenum sfail, GLenum dpfail, GLenum dppass)
 //GL_FUNC_TYPEDEF(void, glTexImage1D, GLenum target, GLint level, GLint internalFormat, GLsizei width, GLint border, GLenum format, GLenum type, const GLvoid* pixels);
-GL_FUNC_TYPEDEF(void, glTexImage2D, GLenum target, GLint level, GLint internalformat, GLsizei width, GLsizei height, GLint border, GLenum format, GLenum type, const void *pixels)
+GL_FUNC_TYPEDEF(void, glTexImage2D, GLenum target, GLint level, GLint internalformat, GLsizei width,
+                GLsizei height, GLint border, GLenum format, GLenum type, const void *pixels)
 //GL_FUNC_TYPEDEF(void, glTexStorage1D, GLenum target, GLsizei levels, GLenum internalFormat, GLsizei width);
 GL_FUNC_TYPEDEF(void, glTexParameterf, GLenum target, GLenum pname, GLfloat param)
 GL_FUNC_TYPEDEF(void, glTexParameterfv, GLenum target, GLenum pname, const GLfloat *params)
 GL_FUNC_TYPEDEF(void, glTexParameteri, GLenum target, GLenum pname, GLint param)
 GL_FUNC_TYPEDEF(void, glTexParameteriv, GLenum target, GLenum pname, const GLint *params)
-GL_FUNC_TYPEDEF(void, glTexSubImage2D, GLenum target, GLint level, GLint xoffset, GLint yoffset, GLsizei width, GLsizei height, GLenum format, GLenum type, const void *pixels)
+GL_FUNC_TYPEDEF(void, glTexSubImage2D, GLenum target, GLint level, GLint xoffset, GLint yoffset,
+                GLsizei width, GLsizei height, GLenum format, GLenum type, const void *pixels)
 GL_FUNC_TYPEDEF(void, glUniform1f, GLint location, GLfloat v0)
 GL_FUNC_TYPEDEF(void, glUniform1fv, GLint location, GLsizei count, const GLfloat *value)
 GL_FUNC_TYPEDEF(void, glUniform1i, GLint location, GLint v0)
@@ -143,9 +170,12 @@ GL_FUNC_TYPEDEF(void, glUniform4f, GLint location, GLfloat v0, GLfloat v1, GLflo
 GL_FUNC_TYPEDEF(void, glUniform4fv, GLint location, GLsizei count, const GLfloat *value)
 GL_FUNC_TYPEDEF(void, glUniform4i, GLint location, GLint v0, GLint v1, GLint v2, GLint v3)
 GL_FUNC_TYPEDEF(void, glUniform4iv, GLint location, GLsizei count, const GLint *value)
-GL_FUNC_TYPEDEF(void, glUniformMatrix2fv, GLint location, GLsizei count, GLboolean transpose, const GLfloat *value)
-GL_FUNC_TYPEDEF(void, glUniformMatrix3fv, GLint location, GLsizei count, GLboolean transpose, const GLfloat *value)
-GL_FUNC_TYPEDEF(void, glUniformMatrix4fv, GLint location, GLsizei count, GLboolean transpose, const GLfloat *value)
+GL_FUNC_TYPEDEF(void, glUniformMatrix2fv, GLint location, GLsizei count, GLboolean transpose,
+                const GLfloat *value)
+GL_FUNC_TYPEDEF(void, glUniformMatrix3fv, GLint location, GLsizei count, GLboolean transpose,
+                const GLfloat *value)
+GL_FUNC_TYPEDEF(void, glUniformMatrix4fv, GLint location, GLsizei count, GLboolean transpose,
+                const GLfloat *value)
 GL_FUNC_TYPEDEF(void, glUseProgram, GLuint program)
 GL_FUNC_TYPEDEF(void, glValidateProgram, GLuint program)
 GL_FUNC_TYPEDEF(void, glVertexAttrib1f, GLuint index, GLfloat x)
@@ -156,15 +186,26 @@ GL_FUNC_TYPEDEF(void, glVertexAttrib3f, GLuint index, GLfloat x, GLfloat y, GLfl
 GL_FUNC_TYPEDEF(void, glVertexAttrib3fv, GLuint index, const GLfloat *v)
 GL_FUNC_TYPEDEF(void, glVertexAttrib4f, GLuint index, GLfloat x, GLfloat y, GLfloat z, GLfloat w)
 GL_FUNC_TYPEDEF(void, glVertexAttrib4fv, GLuint index, const GLfloat *v)
-GL_FUNC_TYPEDEF(void, glVertexAttribPointer, GLuint index, GLint size, GLenum type, GLboolean normalized, GLsizei stride, const void *pointer)
+GL_FUNC_TYPEDEF(void, glVertexAttribPointer, GLuint index, GLint size, GLenum type,
+                GLboolean normalized, GLsizei stride, const void *pointer)
 GL_FUNC_TYPEDEF(void, glViewport, GLint x, GLint y, GLsizei width, GLsizei height)
 GL_FUNC_TYPEDEF(void, glReadBuffer, GLenum src)
-GL_FUNC_TYPEDEF(void, glDrawRangeElements, GLenum mode, GLuint start, GLuint end, GLsizei count, GLenum type, const void *indices)
-GL_FUNC_TYPEDEF(void, glTexImage3D, GLenum target, GLint level, GLint internalformat, GLsizei width, GLsizei height, GLsizei depth, GLint border, GLenum format, GLenum type, const void *pixels)
-GL_FUNC_TYPEDEF(void, glTexSubImage3D, GLenum target, GLint level, GLint xoffset, GLint yoffset, GLint zoffset, GLsizei width, GLsizei height, GLsizei depth, GLenum format, GLenum type, const void *pixels)
-GL_FUNC_TYPEDEF(void, glCopyTexSubImage3D, GLenum target, GLint level, GLint xoffset, GLint yoffset, GLint zoffset, GLint x, GLint y, GLsizei width, GLsizei height)
-GL_FUNC_TYPEDEF(void, glCompressedTexImage3D, GLenum target, GLint level, GLenum internalformat, GLsizei width, GLsizei height, GLsizei depth, GLint border, GLsizei imageSize, const void *data)
-GL_FUNC_TYPEDEF(void, glCompressedTexSubImage3D, GLenum target, GLint level, GLint xoffset, GLint yoffset, GLint zoffset, GLsizei width, GLsizei height, GLsizei depth, GLenum format, GLsizei imageSize, const void *data)
+GL_FUNC_TYPEDEF(void, glDrawRangeElements, GLenum mode, GLuint start, GLuint end, GLsizei count,
+                GLenum type, const void *indices)
+GL_FUNC_TYPEDEF(void, glTexImage3D, GLenum target, GLint level, GLint internalformat, GLsizei width,
+                GLsizei height, GLsizei depth, GLint border, GLenum format, GLenum type,
+                const void *pixels)
+GL_FUNC_TYPEDEF(void, glTexSubImage3D, GLenum target, GLint level, GLint xoffset, GLint yoffset,
+                GLint zoffset, GLsizei width, GLsizei height, GLsizei depth, GLenum format,
+                GLenum type, const void *pixels)
+GL_FUNC_TYPEDEF(void, glCopyTexSubImage3D, GLenum target, GLint level, GLint xoffset, GLint yoffset,
+                GLint zoffset, GLint x, GLint y, GLsizei width, GLsizei height)
+GL_FUNC_TYPEDEF(void, glCompressedTexImage3D, GLenum target, GLint level, GLenum internalformat,
+                GLsizei width, GLsizei height, GLsizei depth, GLint border, GLsizei imageSize,
+                const void *data)
+GL_FUNC_TYPEDEF(void, glCompressedTexSubImage3D, GLenum target, GLint level, GLint xoffset,
+                GLint yoffset, GLint zoffset, GLsizei width, GLsizei height, GLsizei depth,
+                GLenum format, GLsizei imageSize, const void *data)
 GL_FUNC_TYPEDEF(void, glGenQueries, GLsizei n, GLuint *ids)
 GL_FUNC_TYPEDEF(void, glDeleteQueries, GLsizei n, const GLuint *ids)
 GL_FUNC_TYPEDEF(GLboolean, glIsQuery, GLuint id)
@@ -175,15 +216,24 @@ GL_FUNC_TYPEDEF(void, glGetQueryObjectuiv, GLuint id, GLenum pname, GLuint *para
 GL_FUNC_TYPEDEF(GLboolean, glUnmapBuffer, GLenum target)
 GL_FUNC_TYPEDEF(void, glGetBufferPointerv, GLenum target, GLenum pname, void **params)
 GL_FUNC_TYPEDEF(void, glDrawBuffers, GLsizei n, const GLenum *bufs)
-GL_FUNC_TYPEDEF(void, glUniformMatrix2x3fv, GLint location, GLsizei count, GLboolean transpose, const GLfloat *value)
-GL_FUNC_TYPEDEF(void, glUniformMatrix3x2fv, GLint location, GLsizei count, GLboolean transpose, const GLfloat *value)
-GL_FUNC_TYPEDEF(void, glUniformMatrix2x4fv, GLint location, GLsizei count, GLboolean transpose, const GLfloat *value)
-GL_FUNC_TYPEDEF(void, glUniformMatrix4x2fv, GLint location, GLsizei count, GLboolean transpose, const GLfloat *value)
-GL_FUNC_TYPEDEF(void, glUniformMatrix3x4fv, GLint location, GLsizei count, GLboolean transpose, const GLfloat *value)
-GL_FUNC_TYPEDEF(void, glUniformMatrix4x3fv, GLint location, GLsizei count, GLboolean transpose, const GLfloat *value)
-GL_FUNC_TYPEDEF(void, glBlitFramebuffer, GLint srcX0, GLint srcY0, GLint srcX1, GLint srcY1, GLint dstX0, GLint dstY0, GLint dstX1, GLint dstY1, GLbitfield mask, GLenum filter)
-GL_FUNC_TYPEDEF(void, glRenderbufferStorageMultisample, GLenum target, GLsizei samples, GLenum internalformat, GLsizei width, GLsizei height)
-GL_FUNC_TYPEDEF(void, glFramebufferTextureLayer, GLenum target, GLenum attachment, GLuint texture, GLint level, GLint layer)
+GL_FUNC_TYPEDEF(void, glUniformMatrix2x3fv, GLint location, GLsizei count, GLboolean transpose,
+                const GLfloat *value)
+GL_FUNC_TYPEDEF(void, glUniformMatrix3x2fv, GLint location, GLsizei count, GLboolean transpose,
+                const GLfloat *value)
+GL_FUNC_TYPEDEF(void, glUniformMatrix2x4fv, GLint location, GLsizei count, GLboolean transpose,
+                const GLfloat *value)
+GL_FUNC_TYPEDEF(void, glUniformMatrix4x2fv, GLint location, GLsizei count, GLboolean transpose,
+                const GLfloat *value)
+GL_FUNC_TYPEDEF(void, glUniformMatrix3x4fv, GLint location, GLsizei count, GLboolean transpose,
+                const GLfloat *value)
+GL_FUNC_TYPEDEF(void, glUniformMatrix4x3fv, GLint location, GLsizei count, GLboolean transpose,
+                const GLfloat *value)
+GL_FUNC_TYPEDEF(void, glBlitFramebuffer, GLint srcX0, GLint srcY0, GLint srcX1, GLint srcY1,
+                GLint dstX0, GLint dstY0, GLint dstX1, GLint dstY1, GLbitfield mask, GLenum filter)
+GL_FUNC_TYPEDEF(void, glRenderbufferStorageMultisample, GLenum target, GLsizei samples,
+                GLenum internalformat, GLsizei width, GLsizei height)
+GL_FUNC_TYPEDEF(void, glFramebufferTextureLayer, GLenum target, GLenum attachment, GLuint texture,
+                GLint level, GLint layer)
 GL_FUNC_TYPEDEF(void, glFlushMappedBufferRange, GLenum target, GLintptr offset, GLsizeiptr length)
 GL_FUNC_TYPEDEF(void, glBindVertexArray, GLuint array)
 GL_FUNC_TYPEDEF(void, glDeleteVertexArrays, GLsizei n, const GLuint *arrays)
@@ -192,11 +242,15 @@ GL_FUNC_TYPEDEF(GLboolean, glIsVertexArray, GLuint array)
 GL_FUNC_TYPEDEF(void, glGetIntegeri_v, GLenum target, GLuint index, GLint *data)
 GL_FUNC_TYPEDEF(void, glBeginTransformFeedback, GLenum primitiveMode)
 GL_FUNC_TYPEDEF(void, glEndTransformFeedback)
-GL_FUNC_TYPEDEF(void, glBindBufferRange, GLenum target, GLuint index, GLuint buffer, GLintptr offset, GLsizeiptr size)
+GL_FUNC_TYPEDEF(void, glBindBufferRange, GLenum target, GLuint index, GLuint buffer,
+                GLintptr offset, GLsizeiptr size)
 GL_FUNC_TYPEDEF(void, glBindBufferBase, GLenum target, GLuint index, GLuint buffer)
-GL_FUNC_TYPEDEF(void, glTransformFeedbackVaryings, GLuint program, GLsizei count, const GLchar *const*varyings, GLenum bufferMode)
-GL_FUNC_TYPEDEF(void, glGetTransformFeedbackVarying, GLuint program, GLuint index, GLsizei bufSize, GLsizei *length, GLsizei *size, GLenum *type, GLchar *name)
-GL_FUNC_TYPEDEF(void, glVertexAttribIPointer, GLuint index, GLint size, GLenum type, GLsizei stride, const void *pointer)
+GL_FUNC_TYPEDEF(void, glTransformFeedbackVaryings, GLuint program, GLsizei count,
+                const GLchar *const *varyings, GLenum bufferMode)
+GL_FUNC_TYPEDEF(void, glGetTransformFeedbackVarying, GLuint program, GLuint index, GLsizei bufSize,
+                GLsizei *length, GLsizei *size, GLenum *type, GLchar *name)
+GL_FUNC_TYPEDEF(void, glVertexAttribIPointer, GLuint index, GLint size, GLenum type, GLsizei stride,
+                const void *pointer)
 GL_FUNC_TYPEDEF(void, glGetVertexAttribIiv, GLuint index, GLenum pname, GLint *params)
 GL_FUNC_TYPEDEF(void, glGetVertexAttribIuiv, GLuint index, GLenum pname, GLuint *params)
 GL_FUNC_TYPEDEF(void, glVertexAttribI4i, GLuint index, GLint x, GLint y, GLint z, GLint w)
@@ -216,23 +270,33 @@ GL_FUNC_TYPEDEF(void, glUniform4uiv, GLint location, GLsizei count, const GLuint
 GL_FUNC_TYPEDEF(void, glClearBufferiv, GLenum buffer, GLint drawbuffer, const GLint *value)
 GL_FUNC_TYPEDEF(void, glClearBufferuiv, GLenum buffer, GLint drawbuffer, const GLuint *value)
 GL_FUNC_TYPEDEF(void, glClearBufferfv, GLenum buffer, GLint drawbuffer, const GLfloat *value)
-GL_FUNC_TYPEDEF(void, glClearBufferfi, GLenum buffer, GLint drawbuffer, GLfloat depth, GLint stencil)
-GL_FUNC_TYPEDEF(void, glCopyBufferSubData, GLenum readTarget, GLenum writeTarget, GLintptr readOffset, GLintptr writeOffset, GLsizeiptr size)
-GL_FUNC_TYPEDEF(void, glGetUniformIndices, GLuint program, GLsizei uniformCount, const GLchar *const*uniformNames, GLuint *uniformIndices)
-GL_FUNC_TYPEDEF(void, glGetActiveUniformsiv, GLuint program, GLsizei uniformCount, const GLuint *uniformIndices, GLenum pname, GLint *params)
+GL_FUNC_TYPEDEF(void, glClearBufferfi, GLenum buffer, GLint drawbuffer, GLfloat depth,
+                GLint stencil)
+GL_FUNC_TYPEDEF(void, glCopyBufferSubData, GLenum readTarget, GLenum writeTarget,
+                GLintptr readOffset, GLintptr writeOffset, GLsizeiptr size)
+GL_FUNC_TYPEDEF(void, glGetUniformIndices, GLuint program, GLsizei uniformCount,
+                const GLchar *const *uniformNames, GLuint *uniformIndices)
+GL_FUNC_TYPEDEF(void, glGetActiveUniformsiv, GLuint program, GLsizei uniformCount,
+                const GLuint *uniformIndices, GLenum pname, GLint *params)
 GL_FUNC_TYPEDEF(GLuint, glGetUniformBlockIndex, GLuint program, const GLchar *uniformBlockName)
-GL_FUNC_TYPEDEF(void, glGetActiveUniformBlockiv, GLuint program, GLuint uniformBlockIndex, GLenum pname, GLint *params)
-GL_FUNC_TYPEDEF(void, glGetActiveUniformBlockName, GLuint program, GLuint uniformBlockIndex, GLsizei bufSize, GLsizei *length, GLchar *uniformBlockName)
-GL_FUNC_TYPEDEF(void, glUniformBlockBinding, GLuint program, GLuint uniformBlockIndex, GLuint uniformBlockBinding)
-GL_FUNC_TYPEDEF(void, glDrawArraysInstanced, GLenum mode, GLint first, GLsizei count, GLsizei instancecount)
-GL_FUNC_TYPEDEF(void, glDrawElementsInstanced, GLenum mode, GLsizei count, GLenum type, const void *indices, GLsizei instancecount)
+GL_FUNC_TYPEDEF(void, glGetActiveUniformBlockiv, GLuint program, GLuint uniformBlockIndex,
+                GLenum pname, GLint *params)
+GL_FUNC_TYPEDEF(void, glGetActiveUniformBlockName, GLuint program, GLuint uniformBlockIndex,
+                GLsizei bufSize, GLsizei *length, GLchar *uniformBlockName)
+GL_FUNC_TYPEDEF(void, glUniformBlockBinding, GLuint program, GLuint uniformBlockIndex,
+                GLuint uniformBlockBinding)
+GL_FUNC_TYPEDEF(void, glDrawArraysInstanced, GLenum mode, GLint first, GLsizei count,
+                GLsizei instancecount)
+GL_FUNC_TYPEDEF(void, glDrawElementsInstanced, GLenum mode, GLsizei count, GLenum type,
+                const void *indices, GLsizei instancecount)
 GL_FUNC_TYPEDEF(GLsync, glFenceSync, GLenum condition, GLbitfield flags)
 GL_FUNC_TYPEDEF(GLboolean, glIsSync, GLsync sync)
 GL_FUNC_TYPEDEF(void, glDeleteSync, GLsync sync)
 GL_FUNC_TYPEDEF(GLenum, glClientWaitSync, GLsync sync, GLbitfield flags, GLuint64 timeout)
 GL_FUNC_TYPEDEF(void, glWaitSync, GLsync sync, GLbitfield flags, GLuint64 timeout)
 GL_FUNC_TYPEDEF(void, glGetInteger64v, GLenum pname, GLint64 *data)
-GL_FUNC_TYPEDEF(void, glGetSynciv, GLsync sync, GLenum pname, GLsizei bufSize, GLsizei *length, GLint *values)
+GL_FUNC_TYPEDEF(void, glGetSynciv, GLsync sync, GLenum pname, GLsizei bufSize, GLsizei *length,
+                GLint *values)
 GL_FUNC_TYPEDEF(void, glGetInteger64i_v, GLenum target, GLuint index, GLint64 *data)
 GL_FUNC_TYPEDEF(void, glGetBufferParameteri64v, GLenum target, GLenum pname, GLint64 *params)
 GL_FUNC_TYPEDEF(void, glGenSamplers, GLsizei count, GLuint *samplers)
@@ -252,28 +316,43 @@ GL_FUNC_TYPEDEF(void, glGenTransformFeedbacks, GLsizei n, GLuint *ids)
 GL_FUNC_TYPEDEF(GLboolean, glIsTransformFeedback, GLuint id)
 GL_FUNC_TYPEDEF(void, glPauseTransformFeedback)
 GL_FUNC_TYPEDEF(void, glResumeTransformFeedback)
-GL_FUNC_TYPEDEF(void, glGetProgramBinary, GLuint program, GLsizei bufSize, GLsizei *length, GLenum *binaryFormat, void *binary)
-GL_FUNC_TYPEDEF(void, glProgramBinary, GLuint program, GLenum binaryFormat, const void *binary, GLsizei length)
+GL_FUNC_TYPEDEF(void, glGetProgramBinary, GLuint program, GLsizei bufSize, GLsizei *length,
+                GLenum *binaryFormat, void *binary)
+GL_FUNC_TYPEDEF(void, glProgramBinary, GLuint program, GLenum binaryFormat, const void *binary,
+                GLsizei length)
 GL_FUNC_TYPEDEF(void, glProgramParameteri, GLuint program, GLenum pname, GLint value)
-GL_FUNC_TYPEDEF(void, glInvalidateFramebuffer, GLenum target, GLsizei numAttachments, const GLenum *attachments)
-GL_FUNC_TYPEDEF(void, glInvalidateSubFramebuffer, GLenum target, GLsizei numAttachments, const GLenum *attachments, GLint x, GLint y, GLsizei width, GLsizei height)
-GL_FUNC_TYPEDEF(void, glTexStorage2D, GLenum target, GLsizei levels, GLenum internalformat, GLsizei width, GLsizei height)
-GL_FUNC_TYPEDEF(void, glTexStorage3D, GLenum target, GLsizei levels, GLenum internalformat, GLsizei width, GLsizei height, GLsizei depth)
-GL_FUNC_TYPEDEF(void, glGetInternalformativ, GLenum target, GLenum internalformat, GLenum pname, GLsizei bufSize, GLint *params)
-GL_FUNC_TYPEDEF(void, glDispatchCompute, GLuint num_groups_x, GLuint num_groups_y, GLuint num_groups_z)
+GL_FUNC_TYPEDEF(void, glInvalidateFramebuffer, GLenum target, GLsizei numAttachments,
+                const GLenum *attachments)
+GL_FUNC_TYPEDEF(void, glInvalidateSubFramebuffer, GLenum target, GLsizei numAttachments,
+                const GLenum *attachments, GLint x, GLint y, GLsizei width, GLsizei height)
+GL_FUNC_TYPEDEF(void, glTexStorage2D, GLenum target, GLsizei levels, GLenum internalformat,
+                GLsizei width, GLsizei height)
+GL_FUNC_TYPEDEF(void, glTexStorage3D, GLenum target, GLsizei levels, GLenum internalformat,
+                GLsizei width, GLsizei height, GLsizei depth)
+GL_FUNC_TYPEDEF(void, glGetInternalformativ, GLenum target, GLenum internalformat, GLenum pname,
+                GLsizei bufSize, GLint *params)
+GL_FUNC_TYPEDEF(void, glDispatchCompute, GLuint num_groups_x, GLuint num_groups_y,
+                GLuint num_groups_z)
 GL_FUNC_TYPEDEF(void, glDispatchComputeIndirect, GLintptr indirect)
 GL_FUNC_TYPEDEF(void, glDrawArraysIndirect, GLenum mode, const void *indirect)
 GL_FUNC_TYPEDEF(void, glDrawElementsIndirect, GLenum mode, GLenum type, const void *indirect)
 GL_FUNC_TYPEDEF(void, glFramebufferParameteri, GLenum target, GLenum pname, GLint param)
 GL_FUNC_TYPEDEF(void, glGetFramebufferParameteriv, GLenum target, GLenum pname, GLint *params)
-GL_FUNC_TYPEDEF(void, glGetProgramInterfaceiv, GLuint program, GLenum programInterface, GLenum pname, GLint *params)
-GL_FUNC_TYPEDEF(GLuint, glGetProgramResourceIndex, GLuint program, GLenum programInterface, const GLchar *name)
-GL_FUNC_TYPEDEF(void, glGetProgramResourceName, GLuint program, GLenum programInterface, GLuint index, GLsizei bufSize, GLsizei *length, GLchar *name)
-GL_FUNC_TYPEDEF(void, glGetProgramResourceiv, GLuint program, GLenum programInterface, GLuint index, GLsizei propCount, const GLenum *props, GLsizei bufSize, GLsizei *length, GLint *params)
-GL_FUNC_TYPEDEF(GLint, glGetProgramResourceLocation, GLuint program, GLenum programInterface, const GLchar *name)
+GL_FUNC_TYPEDEF(void, glGetProgramInterfaceiv, GLuint program, GLenum programInterface,
+                GLenum pname, GLint *params)
+GL_FUNC_TYPEDEF(GLuint, glGetProgramResourceIndex, GLuint program, GLenum programInterface,
+                const GLchar *name)
+GL_FUNC_TYPEDEF(void, glGetProgramResourceName, GLuint program, GLenum programInterface,
+                GLuint index, GLsizei bufSize, GLsizei *length, GLchar *name)
+GL_FUNC_TYPEDEF(void, glGetProgramResourceiv, GLuint program, GLenum programInterface, GLuint index,
+                GLsizei propCount, const GLenum *props, GLsizei bufSize, GLsizei *length,
+                GLint *params)
+GL_FUNC_TYPEDEF(GLint, glGetProgramResourceLocation, GLuint program, GLenum programInterface,
+                const GLchar *name)
 GL_FUNC_TYPEDEF(void, glUseProgramStages, GLuint pipeline, GLbitfield stages, GLuint program)
 GL_FUNC_TYPEDEF(void, glActiveShaderProgram, GLuint pipeline, GLuint program)
-GL_FUNC_TYPEDEF(GLuint, glCreateShaderProgramv, GLenum type, GLsizei count, const GLchar *const*strings)
+GL_FUNC_TYPEDEF(GLuint, glCreateShaderProgramv, GLenum type, GLsizei count,
+                const GLchar *const *strings)
 GL_FUNC_TYPEDEF(void, glBindProgramPipeline, GLuint pipeline)
 GL_FUNC_TYPEDEF(void, glDeleteProgramPipelines, GLsizei n, const GLuint *pipelines)
 GL_FUNC_TYPEDEF(void, glGenProgramPipelines, GLsizei n, GLuint *pipelines)
@@ -281,84 +360,142 @@ GL_FUNC_TYPEDEF(GLboolean, glIsProgramPipeline, GLuint pipeline)
 GL_FUNC_TYPEDEF(void, glGetProgramPipelineiv, GLuint pipeline, GLenum pname, GLint *params)
 GL_FUNC_TYPEDEF(void, glProgramUniform1i, GLuint program, GLint location, GLint v0)
 GL_FUNC_TYPEDEF(void, glProgramUniform2i, GLuint program, GLint location, GLint v0, GLint v1)
-GL_FUNC_TYPEDEF(void, glProgramUniform3i, GLuint program, GLint location, GLint v0, GLint v1, GLint v2)
-GL_FUNC_TYPEDEF(void, glProgramUniform4i, GLuint program, GLint location, GLint v0, GLint v1, GLint v2, GLint v3)
+GL_FUNC_TYPEDEF(void, glProgramUniform3i, GLuint program, GLint location, GLint v0, GLint v1,
+                GLint v2)
+GL_FUNC_TYPEDEF(void, glProgramUniform4i, GLuint program, GLint location, GLint v0, GLint v1,
+                GLint v2, GLint v3)
 GL_FUNC_TYPEDEF(void, glProgramUniform1ui, GLuint program, GLint location, GLuint v0)
 GL_FUNC_TYPEDEF(void, glProgramUniform2ui, GLuint program, GLint location, GLuint v0, GLuint v1)
-GL_FUNC_TYPEDEF(void, glProgramUniform3ui, GLuint program, GLint location, GLuint v0, GLuint v1, GLuint v2)
-GL_FUNC_TYPEDEF(void, glProgramUniform4ui, GLuint program, GLint location, GLuint v0, GLuint v1, GLuint v2, GLuint v3)
+GL_FUNC_TYPEDEF(void, glProgramUniform3ui, GLuint program, GLint location, GLuint v0, GLuint v1,
+                GLuint v2)
+GL_FUNC_TYPEDEF(void, glProgramUniform4ui, GLuint program, GLint location, GLuint v0, GLuint v1,
+                GLuint v2, GLuint v3)
 GL_FUNC_TYPEDEF(void, glProgramUniform1f, GLuint program, GLint location, GLfloat v0)
 GL_FUNC_TYPEDEF(void, glProgramUniform2f, GLuint program, GLint location, GLfloat v0, GLfloat v1)
-GL_FUNC_TYPEDEF(void, glProgramUniform3f, GLuint program, GLint location, GLfloat v0, GLfloat v1, GLfloat v2)
-GL_FUNC_TYPEDEF(void, glProgramUniform4f, GLuint program, GLint location, GLfloat v0, GLfloat v1, GLfloat v2, GLfloat v3)
-GL_FUNC_TYPEDEF(void, glProgramUniform1iv, GLuint program, GLint location, GLsizei count, const GLint *value)
-GL_FUNC_TYPEDEF(void, glProgramUniform2iv, GLuint program, GLint location, GLsizei count, const GLint *value)
-GL_FUNC_TYPEDEF(void, glProgramUniform3iv, GLuint program, GLint location, GLsizei count, const GLint *value)
-GL_FUNC_TYPEDEF(void, glProgramUniform4iv, GLuint program, GLint location, GLsizei count, const GLint *value)
-GL_FUNC_TYPEDEF(void, glProgramUniform1uiv, GLuint program, GLint location, GLsizei count, const GLuint *value)
-GL_FUNC_TYPEDEF(void, glProgramUniform2uiv, GLuint program, GLint location, GLsizei count, const GLuint *value)
-GL_FUNC_TYPEDEF(void, glProgramUniform3uiv, GLuint program, GLint location, GLsizei count, const GLuint *value)
-GL_FUNC_TYPEDEF(void, glProgramUniform4uiv, GLuint program, GLint location, GLsizei count, const GLuint *value)
-GL_FUNC_TYPEDEF(void, glProgramUniform1fv, GLuint program, GLint location, GLsizei count, const GLfloat *value)
-GL_FUNC_TYPEDEF(void, glProgramUniform2fv, GLuint program, GLint location, GLsizei count, const GLfloat *value)
-GL_FUNC_TYPEDEF(void, glProgramUniform3fv, GLuint program, GLint location, GLsizei count, const GLfloat *value)
-GL_FUNC_TYPEDEF(void, glProgramUniform4fv, GLuint program, GLint location, GLsizei count, const GLfloat *value)
-GL_FUNC_TYPEDEF(void, glProgramUniformMatrix2fv, GLuint program, GLint location, GLsizei count, GLboolean transpose, const GLfloat *value)
-GL_FUNC_TYPEDEF(void, glProgramUniformMatrix3fv, GLuint program, GLint location, GLsizei count, GLboolean transpose, const GLfloat *value)
-GL_FUNC_TYPEDEF(void, glProgramUniformMatrix4fv, GLuint program, GLint location, GLsizei count, GLboolean transpose, const GLfloat *value)
-GL_FUNC_TYPEDEF(void, glProgramUniformMatrix2x3fv, GLuint program, GLint location, GLsizei count, GLboolean transpose, const GLfloat *value)
-GL_FUNC_TYPEDEF(void, glProgramUniformMatrix3x2fv, GLuint program, GLint location, GLsizei count, GLboolean transpose, const GLfloat *value)
-GL_FUNC_TYPEDEF(void, glProgramUniformMatrix2x4fv, GLuint program, GLint location, GLsizei count, GLboolean transpose, const GLfloat *value)
-GL_FUNC_TYPEDEF(void, glProgramUniformMatrix4x2fv, GLuint program, GLint location, GLsizei count, GLboolean transpose, const GLfloat *value)
-GL_FUNC_TYPEDEF(void, glProgramUniformMatrix3x4fv, GLuint program, GLint location, GLsizei count, GLboolean transpose, const GLfloat *value)
-GL_FUNC_TYPEDEF(void, glProgramUniformMatrix4x3fv, GLuint program, GLint location, GLsizei count, GLboolean transpose, const GLfloat *value)
+GL_FUNC_TYPEDEF(void, glProgramUniform3f, GLuint program, GLint location, GLfloat v0, GLfloat v1,
+                GLfloat v2)
+GL_FUNC_TYPEDEF(void, glProgramUniform4f, GLuint program, GLint location, GLfloat v0, GLfloat v1,
+                GLfloat v2, GLfloat v3)
+GL_FUNC_TYPEDEF(void, glProgramUniform1iv, GLuint program, GLint location, GLsizei count,
+                const GLint *value)
+GL_FUNC_TYPEDEF(void, glProgramUniform2iv, GLuint program, GLint location, GLsizei count,
+                const GLint *value)
+GL_FUNC_TYPEDEF(void, glProgramUniform3iv, GLuint program, GLint location, GLsizei count,
+                const GLint *value)
+GL_FUNC_TYPEDEF(void, glProgramUniform4iv, GLuint program, GLint location, GLsizei count,
+                const GLint *value)
+GL_FUNC_TYPEDEF(void, glProgramUniform1uiv, GLuint program, GLint location, GLsizei count,
+                const GLuint *value)
+GL_FUNC_TYPEDEF(void, glProgramUniform2uiv, GLuint program, GLint location, GLsizei count,
+                const GLuint *value)
+GL_FUNC_TYPEDEF(void, glProgramUniform3uiv, GLuint program, GLint location, GLsizei count,
+                const GLuint *value)
+GL_FUNC_TYPEDEF(void, glProgramUniform4uiv, GLuint program, GLint location, GLsizei count,
+                const GLuint *value)
+GL_FUNC_TYPEDEF(void, glProgramUniform1fv, GLuint program, GLint location, GLsizei count,
+                const GLfloat *value)
+GL_FUNC_TYPEDEF(void, glProgramUniform2fv, GLuint program, GLint location, GLsizei count,
+                const GLfloat *value)
+GL_FUNC_TYPEDEF(void, glProgramUniform3fv, GLuint program, GLint location, GLsizei count,
+                const GLfloat *value)
+GL_FUNC_TYPEDEF(void, glProgramUniform4fv, GLuint program, GLint location, GLsizei count,
+                const GLfloat *value)
+GL_FUNC_TYPEDEF(void, glProgramUniformMatrix2fv, GLuint program, GLint location, GLsizei count,
+                GLboolean transpose, const GLfloat *value)
+GL_FUNC_TYPEDEF(void, glProgramUniformMatrix3fv, GLuint program, GLint location, GLsizei count,
+                GLboolean transpose, const GLfloat *value)
+GL_FUNC_TYPEDEF(void, glProgramUniformMatrix4fv, GLuint program, GLint location, GLsizei count,
+                GLboolean transpose, const GLfloat *value)
+GL_FUNC_TYPEDEF(void, glProgramUniformMatrix2x3fv, GLuint program, GLint location, GLsizei count,
+                GLboolean transpose, const GLfloat *value)
+GL_FUNC_TYPEDEF(void, glProgramUniformMatrix3x2fv, GLuint program, GLint location, GLsizei count,
+                GLboolean transpose, const GLfloat *value)
+GL_FUNC_TYPEDEF(void, glProgramUniformMatrix2x4fv, GLuint program, GLint location, GLsizei count,
+                GLboolean transpose, const GLfloat *value)
+GL_FUNC_TYPEDEF(void, glProgramUniformMatrix4x2fv, GLuint program, GLint location, GLsizei count,
+                GLboolean transpose, const GLfloat *value)
+GL_FUNC_TYPEDEF(void, glProgramUniformMatrix3x4fv, GLuint program, GLint location, GLsizei count,
+                GLboolean transpose, const GLfloat *value)
+GL_FUNC_TYPEDEF(void, glProgramUniformMatrix4x3fv, GLuint program, GLint location, GLsizei count,
+                GLboolean transpose, const GLfloat *value)
 GL_FUNC_TYPEDEF(void, glValidateProgramPipeline, GLuint pipeline)
-GL_FUNC_TYPEDEF(void, glGetProgramPipelineInfoLog, GLuint pipeline, GLsizei bufSize, GLsizei *length, GLchar *infoLog)
-GL_FUNC_TYPEDEF(void, glBindImageTexture, GLuint unit, GLuint texture, GLint level, GLboolean layered, GLint layer, GLenum access, GLenum format)
+GL_FUNC_TYPEDEF(void, glGetProgramPipelineInfoLog, GLuint pipeline, GLsizei bufSize,
+                GLsizei *length, GLchar *infoLog)
+GL_FUNC_TYPEDEF(void, glBindImageTexture, GLuint unit, GLuint texture, GLint level,
+                GLboolean layered, GLint layer, GLenum access, GLenum format)
 GL_FUNC_TYPEDEF(void, glGetBooleani_v, GLenum target, GLuint index, GLboolean *data)
 GL_FUNC_TYPEDEF(void, glMemoryBarrier, GLbitfield barriers)
 GL_FUNC_TYPEDEF(void, glMemoryBarrierByRegion, GLbitfield barriers)
-GL_FUNC_TYPEDEF(void, glTexStorage2DMultisample, GLenum target, GLsizei samples, GLenum internalformat, GLsizei width, GLsizei height, GLboolean fixedsamplelocations)
+GL_FUNC_TYPEDEF(void, glTexStorage2DMultisample, GLenum target, GLsizei samples,
+                GLenum internalformat, GLsizei width, GLsizei height,
+                GLboolean fixedsamplelocations)
 GL_FUNC_TYPEDEF(void, glGetMultisamplefv, GLenum pname, GLuint index, GLfloat *val)
 GL_FUNC_TYPEDEF(void, glSampleMaski, GLuint maskNumber, GLbitfield mask)
-GL_FUNC_TYPEDEF(void, glGetTexLevelParameteriv, GLenum target, GLint level, GLenum pname, GLint *params)
-GL_FUNC_TYPEDEF(void, glGetTexLevelParameterfv, GLenum target, GLint level, GLenum pname, GLfloat *params)
-GL_FUNC_TYPEDEF(void, glBindVertexBuffer, GLuint bindingindex, GLuint buffer, GLintptr offset, GLsizei stride)
-GL_FUNC_TYPEDEF(void, glVertexAttribFormat, GLuint attribindex, GLint size, GLenum type, GLboolean normalized, GLuint relativeoffset)
-GL_FUNC_TYPEDEF(void, glVertexAttribIFormat, GLuint attribindex, GLint size, GLenum type, GLuint relativeoffset)
+GL_FUNC_TYPEDEF(void, glGetTexLevelParameteriv, GLenum target, GLint level, GLenum pname,
+                GLint *params)
+GL_FUNC_TYPEDEF(void, glGetTexLevelParameterfv, GLenum target, GLint level, GLenum pname,
+                GLfloat *params)
+GL_FUNC_TYPEDEF(void, glBindVertexBuffer, GLuint bindingindex, GLuint buffer, GLintptr offset,
+                GLsizei stride)
+GL_FUNC_TYPEDEF(void, glVertexAttribFormat, GLuint attribindex, GLint size, GLenum type,
+                GLboolean normalized, GLuint relativeoffset)
+GL_FUNC_TYPEDEF(void, glVertexAttribIFormat, GLuint attribindex, GLint size, GLenum type,
+                GLuint relativeoffset)
 GL_FUNC_TYPEDEF(void, glVertexAttribBinding, GLuint attribindex, GLuint bindingindex)
 GL_FUNC_TYPEDEF(void, glVertexBindingDivisor, GLuint bindingindex, GLuint divisor)
 GL_FUNC_TYPEDEF(void, glBlendBarrier)
-GL_FUNC_TYPEDEF(void, glCopyImageSubData, GLuint srcName, GLenum srcTarget, GLint srcLevel, GLint srcX, GLint srcY, GLint srcZ, GLuint dstName, GLenum dstTarget, GLint dstLevel, GLint dstX, GLint dstY, GLint dstZ, GLsizei srcWidth, GLsizei srcHeight, GLsizei srcDepth)
-GL_FUNC_TYPEDEF(void, glDebugMessageControl, GLenum source, GLenum type, GLenum severity, GLsizei count, const GLuint *ids, GLboolean enabled)
-GL_FUNC_TYPEDEF(void, glDebugMessageInsert, GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei length, const GLchar *buf)
+GL_FUNC_TYPEDEF(void, glCopyImageSubData, GLuint srcName, GLenum srcTarget, GLint srcLevel,
+                GLint srcX, GLint srcY, GLint srcZ, GLuint dstName, GLenum dstTarget,
+                GLint dstLevel, GLint dstX, GLint dstY, GLint dstZ, GLsizei srcWidth,
+                GLsizei srcHeight, GLsizei srcDepth)
+GL_FUNC_TYPEDEF(void, glDebugMessageControl, GLenum source, GLenum type, GLenum severity,
+                GLsizei count, const GLuint *ids, GLboolean enabled)
+GL_FUNC_TYPEDEF(void, glDebugMessageInsert, GLenum source, GLenum type, GLuint id, GLenum severity,
+                GLsizei length, const GLchar *buf)
 GL_FUNC_TYPEDEF(void, glDebugMessageCallback, GLDEBUGPROC callback, const void *userParam)
-GL_FUNC_TYPEDEF(GLuint, glGetDebugMessageLog, GLuint count, GLsizei bufSize, GLenum *sources, GLenum *types, GLuint *ids, GLenum *severities, GLsizei *lengths, GLchar *messageLog)
-GL_FUNC_TYPEDEF(void, glPushDebugGroup, GLenum source, GLuint id, GLsizei length, const GLchar *message)
+GL_FUNC_TYPEDEF(GLuint, glGetDebugMessageLog, GLuint count, GLsizei bufSize, GLenum *sources,
+                GLenum *types, GLuint *ids, GLenum *severities, GLsizei *lengths,
+                GLchar *messageLog)
+GL_FUNC_TYPEDEF(void, glPushDebugGroup, GLenum source, GLuint id, GLsizei length,
+                const GLchar *message)
 GL_FUNC_TYPEDEF(void, glPopDebugGroup)
-GL_FUNC_TYPEDEF(void, glObjectLabel, GLenum identifier, GLuint name, GLsizei length, const GLchar *label)
-GL_FUNC_TYPEDEF(void, glGetObjectLabel, GLenum identifier, GLuint name, GLsizei bufSize, GLsizei *length, GLchar *label)
+GL_FUNC_TYPEDEF(void, glObjectLabel, GLenum identifier, GLuint name, GLsizei length,
+                const GLchar *label)
+GL_FUNC_TYPEDEF(void, glGetObjectLabel, GLenum identifier, GLuint name, GLsizei bufSize,
+                GLsizei *length, GLchar *label)
 GL_FUNC_TYPEDEF(void, glObjectPtrLabel, const void *ptr, GLsizei length, const GLchar *label)
-GL_FUNC_TYPEDEF(void, glGetObjectPtrLabel, const void *ptr, GLsizei bufSize, GLsizei *length, GLchar *label)
+GL_FUNC_TYPEDEF(void, glGetObjectPtrLabel, const void *ptr, GLsizei bufSize, GLsizei *length,
+                GLchar *label)
 GL_FUNC_TYPEDEF(void, glGetPointerv, GLenum pname, void **params)
 GL_FUNC_TYPEDEF(void, glEnablei, GLenum target, GLuint index)
 GL_FUNC_TYPEDEF(void, glDisablei, GLenum target, GLuint index)
 GL_FUNC_TYPEDEF(void, glBlendEquationi, GLuint buf, GLenum mode)
 GL_FUNC_TYPEDEF(void, glBlendEquationSeparatei, GLuint buf, GLenum modeRGB, GLenum modeAlpha)
 GL_FUNC_TYPEDEF(void, glBlendFunci, GLuint buf, GLenum src, GLenum dst)
-GL_FUNC_TYPEDEF(void, glBlendFuncSeparatei, GLuint buf, GLenum srcRGB, GLenum dstRGB, GLenum srcAlpha, GLenum dstAlpha)
-GL_FUNC_TYPEDEF(void, glColorMaski, GLuint index, GLboolean r, GLboolean g, GLboolean b, GLboolean a)
+GL_FUNC_TYPEDEF(void, glBlendFuncSeparatei, GLuint buf, GLenum srcRGB, GLenum dstRGB,
+                GLenum srcAlpha, GLenum dstAlpha)
+GL_FUNC_TYPEDEF(void, glColorMaski, GLuint index, GLboolean r, GLboolean g, GLboolean b,
+                GLboolean a)
 GL_FUNC_TYPEDEF(GLboolean, glIsEnabledi, GLenum target, GLuint index)
-GL_FUNC_TYPEDEF(void, glDrawElementsBaseVertex, GLenum mode, GLsizei count, GLenum type, const void *indices, GLint basevertex)
-GL_FUNC_TYPEDEF(void, glDrawRangeElementsBaseVertex, GLenum mode, GLuint start, GLuint end, GLsizei count, GLenum type, const void *indices, GLint basevertex)
-GL_FUNC_TYPEDEF(void, glDrawElementsInstancedBaseVertex, GLenum mode, GLsizei count, GLenum type, const void *indices, GLsizei instancecount, GLint basevertex)
-GL_FUNC_TYPEDEF(void, glFramebufferTexture, GLenum target, GLenum attachment, GLuint texture, GLint level)
-GL_FUNC_TYPEDEF(void, glPrimitiveBoundingBox, GLfloat minX, GLfloat minY, GLfloat minZ, GLfloat minW, GLfloat maxX, GLfloat maxY, GLfloat maxZ, GLfloat maxW)
+GL_FUNC_TYPEDEF(void, glDrawElementsBaseVertex, GLenum mode, GLsizei count, GLenum type,
+                const void *indices, GLint basevertex)
+GL_FUNC_TYPEDEF(void, glDrawRangeElementsBaseVertex, GLenum mode, GLuint start, GLuint end,
+                GLsizei count, GLenum type, const void *indices, GLint basevertex)
+GL_FUNC_TYPEDEF(void, glDrawElementsInstancedBaseVertex, GLenum mode, GLsizei count, GLenum type,
+                const void *indices, GLsizei instancecount, GLint basevertex)
+GL_FUNC_TYPEDEF(void, glFramebufferTexture, GLenum target, GLenum attachment, GLuint texture,
+                GLint level)
+GL_FUNC_TYPEDEF(void, glPrimitiveBoundingBox, GLfloat minX, GLfloat minY, GLfloat minZ,
+                GLfloat minW, GLfloat maxX, GLfloat maxY, GLfloat maxZ, GLfloat maxW)
 GL_FUNC_TYPEDEF(GLenum, glGetGraphicsResetStatus)
-GL_FUNC_TYPEDEF(void, glReadnPixels, GLint x, GLint y, GLsizei width, GLsizei height, GLenum format, GLenum type, GLsizei bufSize, void *data)
-GL_FUNC_TYPEDEF(void, glGetnUniformfv, GLuint program, GLint location, GLsizei bufSize, GLfloat *params)
-GL_FUNC_TYPEDEF(void, glGetnUniformiv, GLuint program, GLint location, GLsizei bufSize, GLint *params)
-GL_FUNC_TYPEDEF(void, glGetnUniformuiv, GLuint program, GLint location, GLsizei bufSize, GLuint *params)
+GL_FUNC_TYPEDEF(void, glReadnPixels, GLint x, GLint y, GLsizei width, GLsizei height, GLenum format,
+                GLenum type, GLsizei bufSize, void *data)
+GL_FUNC_TYPEDEF(void, glGetnUniformfv, GLuint program, GLint location, GLsizei bufSize,
+                GLfloat *params)
+GL_FUNC_TYPEDEF(void, glGetnUniformiv, GLuint program, GLint location, GLsizei bufSize,
+                GLint *params)
+GL_FUNC_TYPEDEF(void, glGetnUniformuiv, GLuint program, GLint location, GLsizei bufSize,
+                GLuint *params)
 GL_FUNC_TYPEDEF(void, glMinSampleShading, GLfloat value)
 GL_FUNC_TYPEDEF(void, glPatchParameteri, GLenum pname, GLint value)
 GL_FUNC_TYPEDEF(void, glTexParameterIiv, GLenum target, GLenum pname, const GLint *params)
@@ -370,12 +507,25 @@ GL_FUNC_TYPEDEF(void, glSamplerParameterIuiv, GLuint sampler, GLenum pname, cons
 GL_FUNC_TYPEDEF(void, glGetSamplerParameterIiv, GLuint sampler, GLenum pname, GLint *params)
 GL_FUNC_TYPEDEF(void, glGetSamplerParameterIuiv, GLuint sampler, GLenum pname, GLuint *params)
 GL_FUNC_TYPEDEF(void, glTexBuffer, GLenum target, GLenum internalformat, GLuint buffer)
-GL_FUNC_TYPEDEF(void, glTexBufferRange, GLenum target, GLenum internalformat, GLuint buffer, GLintptr offset, GLsizeiptr size)
-GL_FUNC_TYPEDEF(void, glTexStorage3DMultisample, GLenum target, GLsizei samples, GLenum internalformat, GLsizei width, GLsizei height, GLsizei depth, GLboolean fixedsamplelocations)
-GL_FUNC_TYPEDEF(void*, glMapBufferRange, GLenum target, GLintptr offset, GLsizeiptr length, GLbitfield access)
-GL_FUNC_TYPEDEF(void, glBufferStorageEXT, GLenum target, GLsizeiptr size, const void* data, GLbitfield flags)
+GL_FUNC_TYPEDEF(void, glTexBufferRange, GLenum target, GLenum internalformat, GLuint buffer,
+                GLintptr offset, GLsizeiptr size)
+GL_FUNC_TYPEDEF(void, glTexStorage3DMultisample, GLenum target, GLsizei samples,
+                GLenum internalformat, GLsizei width, GLsizei height, GLsizei depth,
+                GLboolean fixedsamplelocations)
+GL_FUNC_TYPEDEF(void*, glMapBufferRange, GLenum target, GLintptr offset, GLsizeiptr length,
+                GLbitfield access)
+GL_FUNC_TYPEDEF(void, glBufferStorageEXT, GLenum target, GLsizeiptr size, const void *data,
+                GLbitfield flags)
 GL_FUNC_TYPEDEF(void, glGetQueryObjectivEXT, GLuint id, GLenum pname, GLint *params)
 GL_FUNC_TYPEDEF(void, glGetQueryObjecti64vEXT, GLuint id, GLenum pname, GLint64 *params)
+GL_FUNC_TYPEDEF(void, glBindFragDataLocationEXT, GLuint program, GLuint colorNumber,
+                const GLchar *name)
+GL_FUNC_TYPEDEF(void*, glMapBufferOES, GLenum target, GLenum access)
+
+GL_FUNC_TYPEDEF(void, glMultiDrawArraysIndirectEXT, GLenum mode, const void *indirect, GLsizei drawcount, GLsizei stride)
+GL_FUNC_TYPEDEF(void, glMultiDrawElementsIndirectEXT, GLenum mode, GLenum type, const void *indirect, GLsizei drawcount, GLsizei stride)
+GL_FUNC_TYPEDEF(void, glBruh)
+GL_FUNC_TYPEDEF(void, glMultiDrawElementsBaseVertexEXT, GLenum mode, const GLsizei *count, GLenum type, const void *const*indices, GLsizei drawcount, const GLint *basevertex)
 
 #define GL_FUNC_DECL(name) \
 name##_PTR name;
@@ -745,8 +895,22 @@ struct gles_func_t {
     GL_FUNC_DECL(glBufferStorageEXT)
     GL_FUNC_DECL(glGetQueryObjectivEXT)
     GL_FUNC_DECL(glGetQueryObjecti64vEXT)
+    GL_FUNC_DECL(glBindFragDataLocationEXT)
+    GL_FUNC_DECL(glMapBufferOES)
+
+    GL_FUNC_DECL(glMultiDrawArraysIndirectEXT)
+    GL_FUNC_DECL(glMultiDrawElementsIndirectEXT)
+    GL_FUNC_DECL(glMultiDrawElementsBaseVertexEXT)
+
+    GL_FUNC_DECL(glBruh)
 };
 
 extern struct gles_func_t g_gles_func;
+
+#define GLES g_gles_func
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif //MOBILEGLUES_GLES_H
