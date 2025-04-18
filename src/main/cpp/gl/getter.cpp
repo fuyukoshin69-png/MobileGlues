@@ -148,25 +148,25 @@ const char* getGpuName() {
         return "<unknown>";
     }
 
-    if (strncmp(gpuName, "ANGLE", 5) == 0) {
-        std::string gpuStr(gpuName);
-
-        size_t firstParen = gpuStr.find('(');
-        size_t secondParen = gpuStr.find('(', firstParen + 1);
-        size_t lastParen = gpuStr.rfind('(');
-
-        std::string gpu = gpuStr.substr(secondParen + 1, lastParen - secondParen - 2);
-
-        size_t vulkanStart = gpuStr.find("Vulkan ");
-        size_t vulkanEnd = gpuStr.find(' ', vulkanStart + 7);
-        std::string vulkanVersion = gpuStr.substr(vulkanStart + 7, vulkanEnd - (vulkanStart + 7));
-
-        std::string formattedGpuName = gpu + " | ANGLE | Vulkan " + vulkanVersion;
-
-        char* result = new char[formattedGpuName.size() + 1];
-        std::strcpy(result, formattedGpuName.c_str());
-        return result;
-    }
+    //if (strncmp(gpuName, "ANGLE", 5) == 0) {
+    //    std::string gpuStr(gpuName);
+//
+    //    size_t firstParen = gpuStr.find('(');
+    //    size_t secondParen = gpuStr.find('(', firstParen + 1);
+    //    size_t lastParen = gpuStr.rfind('(');
+//
+    //    std::string gpu = gpuStr.substr(secondParen + 1, lastParen - secondParen - 2);
+//
+    //    size_t vulkanStart = gpuStr.find("Vulkan ");
+    //    size_t vulkanEnd = gpuStr.find(' ', vulkanStart + 7);
+    //    std::string vulkanVersion = gpuStr.substr(vulkanStart + 7, vulkanEnd - (vulkanStart + 7));
+//
+    //    std::string formattedGpuName = gpu + " | ANGLE | Vulkan " + vulkanVersion;
+//
+    //    char* result = new char[formattedGpuName.size() + 1];
+    //    std::strcpy(result, formattedGpuName.c_str());
+    //    return result;
+    //}
 
     return gpuName;
 }
