@@ -24,6 +24,7 @@
 #include "framebuffer.h"
 #include "pixel.h"
 #include <ankerl/unordered_dense.h>
+#include "FSR1/FSR1.h"
 
 #define DEBUG 0
 
