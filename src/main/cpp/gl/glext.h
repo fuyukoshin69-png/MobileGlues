@@ -2150,7 +2150,6 @@ GLAPI void APIENTRY glDrawTransformFeedbackStreamInstanced (GLenum mode, GLuint 
 #endif /* GL_VERSION_4_2 */
 
 #ifndef GL_VERSION_4_3
-#ifndef GL_MAX_VERTEX_SHADER_STORAGE_BLOCKS
 #define GL_VERSION_4_3 1
 typedef void (APIENTRY  *GLDEBUGPROC)(GLenum source,GLenum type,GLuint id,GLenum severity,GLsizei length,const GLchar *message,const void *userParam);
 #define GL_NUM_SHADING_LANGUAGE_VERSIONS  0x82E9
