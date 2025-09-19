@@ -1307,6 +1307,7 @@ GLAPI GLboolean APIENTRY glIsVertexArray (GLuint array);
 #define GL_UNIFORM_BUFFER_START           0x8A29
 #define GL_UNIFORM_BUFFER_SIZE            0x8A2A
 #define GL_MAX_VERTEX_UNIFORM_BLOCKS      0x8A2B
+#define GL_MAX_VERTEX_SHADER_STORAGE_BLOCKS 0x90D6
 #define GL_MAX_GEOMETRY_UNIFORM_BLOCKS    0x8A2C
 #define GL_MAX_FRAGMENT_UNIFORM_BLOCKS    0x8A2D
 #define GL_MAX_COMBINED_UNIFORM_BLOCKS    0x8A2E
@@ -1386,6 +1387,7 @@ typedef khronos_int64_t GLint64;
 #define GL_MAX_GEOMETRY_OUTPUT_VERTICES   0x8DE0
 #define GL_MAX_GEOMETRY_TOTAL_OUTPUT_COMPONENTS 0x8DE1
 #define GL_MAX_VERTEX_OUTPUT_COMPONENTS   0x9122
+#define GL_MAX_VERTEX_SHADER_STORAGE_BLOCKS 0x90D6
 #define GL_MAX_GEOMETRY_INPUT_COMPONENTS  0x9123
 #define GL_MAX_GEOMETRY_OUTPUT_COMPONENTS 0x9124
 #define GL_MAX_FRAGMENT_INPUT_COMPONENTS  0x9125
@@ -1633,6 +1635,7 @@ GLAPI void APIENTRY glSecondaryColorP3uiv (GLenum type, const GLuint *color);
 #define GL_MAX_FRAGMENT_INTERPOLATION_OFFSET 0x8E5C
 #define GL_FRAGMENT_INTERPOLATION_OFFSET_BITS 0x8E5D
 #define GL_MAX_VERTEX_STREAMS             0x8E71
+#define GL_MAX_VERTEX_SHADER_STORAGE_BLOCKS 0x90D6
 #define GL_DOUBLE_VEC2                    0x8FFC
 #define GL_DOUBLE_VEC3                    0x8FFD
 #define GL_DOUBLE_VEC4                    0x8FFE
@@ -2147,6 +2150,7 @@ GLAPI void APIENTRY glDrawTransformFeedbackStreamInstanced (GLenum mode, GLuint 
 #endif /* GL_VERSION_4_2 */
 
 #ifndef GL_VERSION_4_3
+#ifndef GL_MAX_VERTEX_SHADER_STORAGE_BLOCKS
 #define GL_VERSION_4_3 1
 typedef void (APIENTRY  *GLDEBUGPROC)(GLenum source,GLenum type,GLuint id,GLenum severity,GLsizei length,const GLchar *message,const void *userParam);
 #define GL_NUM_SHADING_LANGUAGE_VERSIONS  0x82E9
